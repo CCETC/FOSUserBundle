@@ -1,5 +1,8 @@
-{% extends "FOSUserBundle::layout.html.twig" %}
+{% extends "SonataAdminBundle::standard_layout.html.twig" %}
 
-{% block fos_user_content %}
-{% include "FOSUserBundle:Registration:register_content.html.twig" %}
-{% endblock fos_user_content %}
+{% block breadcrumb %}Register{% endblock breadcrumb %}
+
+
+{% block content %}
+    {% include "FOSUserBundle:Registration:register_content.html.twig" %}
+{% endblock content %}

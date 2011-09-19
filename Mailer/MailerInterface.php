@@ -30,5 +30,5 @@ interface MailerInterface
      *
      * @param UserInterface $user
      */
-    function sendResettingEmailMessage(UserInterface $user);
+    function sendResettingEmailMessage(UserInterface $user, $adminTitle, $adminEmail);
 }

@@ -1,5 +1,7 @@
-{% extends "FOSUserBundle::layout.html.twig" %}
+{% extends "SonataAdminBundle::standard_layout.html.twig" %}
 
-{% block fos_user_content %}
+{% block breadcrumb %}Reset password{% endblock breadcrumb %}
+
+{% block content %}
 {% include "FOSUserBundle:Resetting:request_content.html.twig" %}
-{% endblock fos_user_content %}
+{% endblock content %}

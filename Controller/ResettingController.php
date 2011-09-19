@@ -47,16 +47,21 @@ class ResettingController extends ContainerAware
         }
 
         if ($user->isPasswordRequestNonExpired($this->container->getParameter('fos_user.resetting.token_ttl'))) {
-            return $this->container->get('templating')->renderResponse('FOSUserBundle:Resetting:passwordAlreadyRequested.html.'.$this->getEngine());
+            $this->setFlash('sonata_flash_error', 'The password for this user has already been requested within the last 24 hours.');
+            return $this->container->get('templating')->renderResponse('FOSUserBundle:Resetting:request.html.'.$this->getEngine());
         }
 
         $user->generateConfirmationToken();
+        $adminTitle = $this->container->get('adminSettings')->adminTitle;
+        $adminEmail = $this->container->get('adminSettings')->adminEmail;
+        
         $this->container->get('session')->set('fos_user_send_resetting_email/email', $user->getEmail());
-        $this->container->get('fos_user.mailer')->sendResettingEmailMessage($user);
+        $this->container->get('fos_user.mailer')->sendResettingEmailMessage($user, $adminTitle, $adminEmail);
         $user->setPasswordRequestedAt(new \DateTime());
         $this->container->get('fos_user.user_manager')->updateUser($user);
 
-        return new RedirectResponse($this->container->get('router')->generate('fos_user_resetting_check_email'));
+        $this->setFlash('sonata_flash_success', 'An email has been sent to haggertypat@gmail.com. It contains an link you must click to reset your password.');
+        return new RedirectResponse($this->container->get('router')->generate('fos_user_security_login'));
     }
 
     /**
@@ -97,42 +102,17 @@ class ResettingController extends ContainerAware
         $process = $formHandler->process($user);
 
         if ($process) {
-            $this->authenticateUser($user);
 
-            $this->setFlash('fos_user_success', 'resetting.flash.success');
+            $this->setFlash('sonata_flash_success', 'Your password has been reset.');
 
-            return new RedirectResponse($this->getRedirectionUrl($user));
+            return new RedirectResponse($this->container->get('router')->generate('fos_user_security_login'));
         }
 
         return $this->container->get('templating')->renderResponse('FOSUserBundle:Resetting:reset.html.'.$this->getEngine(), array(
             'token' => $token,
-            'form' => $form->createView(),
+            'resetForm' => $form->createView(),
             'theme' => $this->container->getParameter('fos_user.template.theme'),
         ));
-    }
-
-    /**
-     * Authenticate a user with Symfony Security
-     *
-     * @param UserInterface $user
-     */
-    protected function authenticateUser(UserInterface $user)
-    {
-        $providerKey = $this->container->getParameter('fos_user.firewall_name');
-        $token = new UsernamePasswordToken($user, null, $providerKey, $user->getRoles());
-
-        $this->container->get('security.context')->setToken($token);
-    }
-
-    /**
-     * Generate the redirection url when the resetting is completed.
-     *
-     * @param UserInterface $user
-     * @return string
-     */
-    protected function getRedirectionUrl(UserInterface $user)
-    {
-        return $this->container->get('router')->generate('fos_user_profile_show');
     }
 
     protected function setFlash($action, $value)

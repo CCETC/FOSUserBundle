@@ -54,7 +54,7 @@ class RegistrationFormHandler
     {
         if ($confirmation) {
             $user->setEnabled(false);
-            $this->mailer->sendConfirmationEmailMessage($user);
+            //$this->mailer->sendConfirmationEmailMessage($user);
         } else {
             $user->setConfirmationToken(null);
             $user->setEnabled(true);

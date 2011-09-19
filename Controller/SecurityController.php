@@ -19,6 +19,15 @@ class SecurityController extends ContainerAware
 {
     public function loginAction()
     {
+        $ua = $_SERVER['HTTP_USER_AGENT'];
+	if((!isset($_SESSION['ie6_message']) || $_SESSION['ie6_message'] == true) && preg_match('/\bmsie 6/i', $ua) && !preg_match('/\bopera/i', $ua)) {
+          $usingIE6 = true;
+        }
+        else{
+          $usingIE6 = false;
+        }
+        
+      
         $request = $this->container->get('request');
         /* @var $request \Symfony\Component\HttpFoundation\Request */
         $session = $request->getSession();
@@ -37,6 +46,9 @@ class SecurityController extends ContainerAware
         if ($error) {
             // TODO: this is a potential security risk (see http://trac.symfony-project.org/ticket/9523)
             $error = $error->getMessage();
+            
+            // customize the disable account error message
+            if($error == 'User account is disabled.') $error = 'Your account must first be approved by an administrator before you can login.  You can contact your administrator and ask to be approved.';
         }
         // last username entered by the user
         $lastUsername = (null === $session) ? '' : $session->get(SecurityContext::LAST_USERNAME);
@@ -44,6 +56,7 @@ class SecurityController extends ContainerAware
         return $this->container->get('templating')->renderResponse('FOSUserBundle:Security:login.html.'.$this->container->getParameter('fos_user.template.engine'), array(
             'last_username' => $lastUsername,
             'error'         => $error,
+            'usingIE6'  => $usingIE6,
         ));
     }
 
