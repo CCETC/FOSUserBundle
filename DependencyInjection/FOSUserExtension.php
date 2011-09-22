@@ -79,6 +79,10 @@ class FOSUserExtension extends Extension
             array($config['from_email']['address'] => $config['from_email']['sender_name'])
         );
         $container->setParameter(
+            'fos_user.registration.approval.from_email',
+            array($config['from_email']['address'] => $config['from_email']['sender_name'])
+        );
+        $container->setParameter(
             'fos_user.resetting.email.from_email',
             array($config['from_email']['address'] => $config['from_email']['sender_name'])
         );
@@ -120,6 +124,7 @@ class FOSUserExtension extends Extension
 
             $this->remapParametersNamespaces($config['registration'], $container, array(
                 'confirmation' => 'fos_user.registration.confirmation.%s',
+                'approval' => 'fos_user.registration.approval.%s',
                 'form' => 'fos_user.registration.form.%s',
             ));
         }

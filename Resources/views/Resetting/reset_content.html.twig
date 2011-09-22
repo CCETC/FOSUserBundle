@@ -1,7 +1,10 @@
 {% form_theme resetForm theme %}
+<div class="user-box">
+
 <form action="{{ path('fos_user_resetting_reset', {'token': token}) }}" {{ form_enctype(resetForm) }} method="POST" class="fos_user_resetting_reset">
     {{ form_widget(resetForm) }}
     <div>
-        <input type="submit" value="{{ 'resetting.reset.submit'|trans({}, 'FOSUserBundle') }}" />
+        <input class="button" type="submit" value="{{ 'resetting.reset.submit'|trans({}, 'FOSUserBundle') }}" />
     </div>
 </form>
+</div>

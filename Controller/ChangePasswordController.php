@@ -29,6 +29,10 @@ class ChangePasswordController extends ContainerAware
      */
     public function changePasswordAction()
     {
+        $baseLayout = $this->container->get('userSettings')->baseLayout;
+        $useBreadcrumb = $this->container->get('userSettings')->useBreadcrumb;
+        $flashName = $this->container->get('userSettings')->flashName;
+        
         $user = $this->container->get('security.context')->getToken()->getUser();
         if (!is_object($user) || !$user instanceof UserInterface) {
             throw new AccessDeniedException('This user does not have access to this section.');
@@ -39,14 +43,20 @@ class ChangePasswordController extends ContainerAware
 
         $process = $formHandler->process($user);
         if ($process) {
-            $this->setFlash('fos_user_success', 'change_password.flash.success');
+            $this->setFlash($flashName, 'change_password.flash.success');
 
             return new RedirectResponse($this->getRedirectionUrl($user));
         }
 
         return $this->container->get('templating')->renderResponse(
             'FOSUserBundle:ChangePassword:changePassword.html.'.$this->container->getParameter('fos_user.template.engine'),
-            array('changePasswordForm' => $form->createView(), 'theme' => $this->container->getParameter('fos_user.template.theme'))
+            array(
+                'changePasswordForm' => $form->createView(),
+                'theme' => $this->container->getParameter('fos_user.template.theme'),
+                'baseLayout' => $baseLayout,
+                'useBreadcrumb' => $useBreadcrumb,
+                    
+            )
         );
     }
 

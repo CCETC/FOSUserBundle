@@ -29,7 +29,7 @@ class RegistrationFormType extends AbstractType
     public function buildForm(FormBuilder $builder, array $options)
     {
         $builder
-            ->add('username', 'hidden')
+//            ->add('username', 'hidden')
             ->add('firstName')
             ->add('lastName')
             ->add('email', 'email')

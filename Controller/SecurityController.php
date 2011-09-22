@@ -19,6 +19,9 @@ class SecurityController extends ContainerAware
 {
     public function loginAction()
     {
+        $baseLayout = $this->container->get('userSettings')->baseLayout;
+        $useBreadcrumb = $this->container->get('userSettings')->useBreadcrumb;
+        
         $ua = $_SERVER['HTTP_USER_AGENT'];
 	if((!isset($_SESSION['ie6_message']) || $_SESSION['ie6_message'] == true) && preg_match('/\bmsie 6/i', $ua) && !preg_match('/\bopera/i', $ua)) {
           $usingIE6 = true;
@@ -48,7 +51,21 @@ class SecurityController extends ContainerAware
             $error = $error->getMessage();
             
             // customize the disable account error message
-            if($error == 'User account is disabled.') $error = 'Your account must first be approved by an administrator before you can login.  You can contact your administrator and ask to be approved.';
+            if($error == 'User account is disabled.') {
+                $confirmationEnabled = $this->container->getParameter('fos_user.registration.confirmation.enabled');
+                $approvalEnabled = $this->container->getParameter('fos_user.registration.approval.enabled');        
+
+                if($confirmationEnabled)
+                {
+                    $error = "You must verify your e-mail before logging in.  Please follow the instructions in the e-mail you received when you registered.";
+                }
+                else if($approvalEnabled)
+                {
+                    $error = "Your account must first be approved by an administrator before you can login.";    
+                }
+            }
+                 
+                
         }
         // last username entered by the user
         $lastUsername = (null === $session) ? '' : $session->get(SecurityContext::LAST_USERNAME);
@@ -57,6 +74,8 @@ class SecurityController extends ContainerAware
             'last_username' => $lastUsername,
             'error'         => $error,
             'usingIE6'  => $usingIE6,
+            'baseLayout' => $baseLayout,
+            'useBreadcrumb' => $useBreadcrumb
         ));
     }
 

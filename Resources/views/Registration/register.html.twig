@@ -1,8 +1,14 @@
-{% extends "SonataAdminBundle::standard_layout.html.twig" %}
+{% extends baseLayout %}
 
-{% block breadcrumb %}Register{% endblock breadcrumb %}
-
+{% if useBreadcrumb %}
+    {% block breadcrumb %}
+        Register
+    {% endblock %}
+{% endif %}
 
 {% block content %}
+{% if not useBreadcrumb %}
+        <h1>Register</h1>
+{% endif %}
     {% include "FOSUserBundle:Registration:register_content.html.twig" %}
 {% endblock content %}

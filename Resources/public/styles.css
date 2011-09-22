@@ -2,7 +2,12 @@
 form.fos_user_profile_edit,
 form.fos_user_change_password,
 div.fos_user_user_show {
-        font-size: 14px; width: 500px; background: none repeat scroll 0% 0% rgb(238, 238, 238); margin: 0pt auto; padding: 15px;
+        font-size: 14px;
+        width: 500px;
+        background: none repeat scroll 0% 0% rgb(238, 238, 238);
+        margin: 0pt auto;
+        padding: 15px;
+        border-radius: 7px;
 }
 
 form.fos_user_change_password input,
@@ -19,7 +24,7 @@ form.fos_user_profile_edit input[type="submit"] {
         width: auto;
 }
 
-div.login_box {
+div.user-box {
     width: 300px;
     margin: 20px auto 20px auto;
     background: white;
@@ -32,16 +37,18 @@ div.login_box {
     -moz-box-shadow: 0 4px 12px #666666;
     -webkit-box-shadow: 0 4px 12px #666666;
     box-shadow: 0 4px 12px #666666;
+    
+    overflow: auto;
 }	
 
-div.login_box form {
+div.user-box form {
 }
 
-div.login_box ul {
+div.user-box ul {
     color: red;
 }
 
-div.login_box .button  {
+div.user-box .button  {
     webkit-border-radius: 4px;
     -moz-border-radius: 4px;
     border-radius: 4px;
@@ -57,17 +64,22 @@ div.login_box .button  {
     float: right;
 }
 
-div.login_box label {
+div.user-box .button:hover  {
+    background: #ccc;
+    cursor: pointer;
+}
+
+div.user-box label {
     font-size: 14px;
     color: #222222;
 }
 
-div.login_box input{
+div.user-box input{
 }
 
-div.login_box input[type="text"],
-div.login_box input[type="email"],
-div.login_box input[type="password"] {
+div.user-box input[type="text"],
+div.user-box input[type="email"],
+div.user-box input[type="password"] {
     font-size: 20px;
     width: 290px;
     color: #222222;
@@ -75,14 +87,19 @@ div.login_box input[type="password"] {
     border: 1px solid #BBBBBB;
 }
 
-div.login_box .submit {
+div.user-box .submit {
     float: right;
     font-size: 16px;
 }
 
-div.login_box a.forgotten_password {
+div.user-box a.forgotten_password {
     font-size: 12px;
     margin-top: 20px;
     float: left;
     clear: both;
+}
+
+div.user-box div.error {
+    color: red;
+    margin: 5px 0 15px 0;
 }

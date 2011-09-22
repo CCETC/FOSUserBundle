@@ -1,13 +1,19 @@
-{% extends "SonataAdminBundle::standard_layout.html.twig" %}
+{% extends baseLayout %}
 
-{% block breadcrumb %}
-    Login
-{% endblock %}
+{% if useBreadcrumb %}
+    {% block breadcrumb %}
+        Login
+    {% endblock %}
+{% endif %}
 
 {% block content %}
-<div class="login_box">
+{% if not useBreadcrumb %}
+        <h1>Login</h1>
+{% endif %}
+
+<div class="user-box">
         {% if error %}
-            <div>{{ error }}</div>
+            <div class="error">{{ error }}</div>
         {% endif %}
 
         <form action="{{ path("fos_user_security_check") }}" method="post">
@@ -27,7 +33,6 @@
 <div style="width: 100%; text-align: center; font-size: 14px">
     <a href="{{ path("fos_user_registration_register") }}">Register</a> |
     <a href="{{ path("fos_user_resetting_request") }}">Forgot your password?</a>
-
 </div>            
 
 

@@ -26,60 +26,43 @@ use FOS\UserBundle\Model\UserInterface;
  */
 class RegistrationController extends ContainerAware
 {
-
-    protected function sendApprovalNeededEmail($user)
-    {
-        $httpHost = $this->container->get('request')->getHttpHost();
-        $baseUrl = $this->container->get('request')->getBaseUrl();
-        $baseLink = $httpHost . $baseUrl;
-
-        $adminTitle = $this->container->get('adminSettings')->adminTitle;
-
-        $message = \Swift_Message::newInstance()
-                ->setSubject($adminTitle.' - Approval needed')
-                ->setFrom($this->container->getParameter('fos_user.registration.confirmation.from_email'))
-                ->setTo($this->container->get('adminSettings')->adminEmail)
-                ->setContentType('text/html')
-                ->setBody('<html>
-                      ' . $user . ' has created an account on the GJGNY Data Tool.<br/>
-                      Before this user can use the tool, you must approve their account.<br/><br/>
-                      You can view all unapproved users by going to this address:<br/>
-                      <a href="http://' . $baseLink . '/admin/gjgny/datatool/user/list?enabled=false">http://' . $baseLink . '/admin/gjgny/datatool/user/list?enabled=false</a>
-                      </html>'
-                )
-        ;
-        $this->container->get('mailer')->send($message);
-    }
-
     public function registerAction()
     {
+        $baseLayout = $this->container->get('userSettings')->baseLayout;
+        $useBreadcrumb = $this->container->get('userSettings')->useBreadcrumb;
+        $flashName = $this->container->get('userSettings')->flashName;
+        $applicationTitle = $this->container->get('userSettings')->applicationTitle;
+        $adminEmail = $this->container->get('userSettings')->adminEmail;
+       
+        
         $form = $this->container->get('fos_user.registration.form');
         $formHandler = $this->container->get('fos_user.registration.form.handler');
         $confirmationEnabled = $this->container->getParameter('fos_user.registration.confirmation.enabled');
-
+        $approvalEnabled = $this->container->getParameter('fos_user.registration.approval.enabled');
+        
         $httpHost = $this->container->get('request')->getHttpHost();
         $baseUrl = $this->container->get('request')->getBaseUrl();
         $baseLink = $httpHost . $baseUrl;
 
-        $process = $formHandler->process($confirmationEnabled);
+        $process = $formHandler->process($confirmationEnabled, $approvalEnabled, $applicationTitle, $adminEmail);
         if($process)
         {
             $user = $form->getData();
 
-            if($confirmationEnabled)
+            if($approvalEnabled)
             {
-                $this->setFlash('sonata_flash_success', 'Before you can log in an admin must verify your account.  Your admin has been asked to approve your account, but if need be you can contact your admin at ' . $this->container->get('adminSettings')->adminEmail . ' and request to be approved.');
-                $route = 'fos_user_security_login';
-
-                if(isset($this->container->get('adminSettings')->adminEmail))
-                {
-                    $this->sendApprovalNeededEmail($user);                
-                }
-                
+                $this->setFlash($flashName, 'Your account has been created.  Before you can log in an admin must verify your account.');
+                $route = 'home';
+            }
+            else if($confirmationEnabled)
+            {
+                $this->container->get('session')->set('fos_user_send_confirmation_email/email', $user->getEmail());
+                $this->setFlash($flashName, 'Your account has been created.  An e-mail has been sent to '.$user->getEmail().'.  Follow the instructions in the e-mail to activate your account.');
+                $route = 'home';
             }
             else
             {
-                $this->setFlash('sonata_flash_success', 'Your account has been created.  You are now logged in');
+                $this->setFlash($flashName, 'Your account has been created.  You are now logged in.');
                 $this->authenticateUser($user);
                 $route = 'home';
             }
@@ -93,6 +76,8 @@ class RegistrationController extends ContainerAware
         return $this->container->get('templating')->renderResponse('FOSUserBundle:Registration:register.html.' . $this->getEngine(), array(
             'registrationForm' => $form->createView(),
             'theme' => $this->container->getParameter('fos_user.template.theme'),
+            'baseLayout' => $baseLayout,
+            'useBreadcrumb' => $useBreadcrumb            
         ));
     }
 
@@ -133,7 +118,11 @@ class RegistrationController extends ContainerAware
         $this->container->get('fos_user.user_manager')->updateUser($user);
         $this->authenticateUser($user);
 
-        return new RedirectResponse($this->container->get('router')->generate('fos_user_registration_confirmed'));
+        $flashName = $this->container->get('userSettings')->flashName;
+
+        $this->setFlash($flashName, 'Your account has been confirmed.  You are now logged in.');
+        $url = $this->container->get('router')->generate('home');
+        return new RedirectResponse($url);
     }
 
     /**

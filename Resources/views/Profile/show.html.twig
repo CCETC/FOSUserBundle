@@ -1,8 +1,14 @@
-{% extends "SonataAdminBundle::standard_layout.html.twig" %}
+{% extends baseLayout %}
 
-{% block breadcrumb %}Information{% endblock breadcrumb %}
-
+{% if useBreadcrumb %}
+    {% block breadcrumb %}
+        Information
+    {% endblock %}
+{% endif %}
 
 {% block content %}
+{% if not useBreadcrumb %}
+        <h1>Information</h1>
+{% endif %}
 {% include "FOSUserBundle:Profile:show_content.html.twig" %}
 {% endblock content %}

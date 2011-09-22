@@ -23,12 +23,15 @@ interface MailerInterface
      *
      * @param UserInterface $user
      */
-    function sendConfirmationEmailMessage(UserInterface $user);
+    function sendConfirmationEmailMessage(UserInterface $user, $applicationTitle);
 
     /**
      * Send an email to a user to confirm the password reset
      *
      * @param UserInterface $user
      */
-    function sendResettingEmailMessage(UserInterface $user, $adminTitle, $adminEmail);
+    function sendResettingEmailMessage(UserInterface $user, $applicationTitle, $adminEmail);
+    
+    function sendApprovalNeededEmailMessage($user, $applicationTitle, $adminEmail);
+    
 }

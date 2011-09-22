@@ -14,6 +14,8 @@ security.login.submit: Login
 # Profile
 profile.show.username: Username
 profile.show.email: Email
+profile.show.firstName: First Name
+profile.show.lastName: Last Name
 profile.edit.submit: Update
 profile.flash.updated: The profile has been updated
 
@@ -31,6 +33,7 @@ registration.flash.user_created: The user has been created successfully
 registration.email: |
     Welcome %username%!
     Hello %username%!
+    Your account on %applicationTitle% has been created.
 
     To finish validating your account - please visit %confirmationUrl%
 
@@ -47,7 +50,7 @@ resetting.email: |
     Reset Password
     Hello %username%!
 
-    You have requested to reset your password for %adminTitle%.
+    You have requested to reset your password for %applicationTitle%.
 
     To reset your password - please visit %confirmationUrl%
 
@@ -65,15 +68,11 @@ fos_user_group_form_name: "Group name:"
 fos_user_profile_form_user_username: "Username:"
 fos_user_profile_form_user_email: "Email:"
 fos_user_profile_form_current: "Current Password (for verification):"
-fos_user_profile_form_user_county: "County:"
 fos_user_profile_form_user_firstName: "First Name:"
 fos_user_profile_form_user_lastName: "Last Name:"
-fos_user_profile_form_user_organization: "Organization:"
 
 fos_user_registration_form_firstName: "First Name:"
 fos_user_registration_form_lastName: "Last Name:"
-fos_user_registration_form_organization: "Organization:"
-fos_user_registration_form_county: "County working in:"
 fos_user_registration_form_username: "Username:"
 fos_user_registration_form_email: "Email:"
 fos_user_registration_form_plainPassword_first: "Password:"
