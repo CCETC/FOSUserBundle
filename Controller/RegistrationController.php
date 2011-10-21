@@ -36,6 +36,26 @@ class RegistrationController extends ContainerAware
        
         
         $form = $this->container->get('fos_user.registration.form');
+        
+/*        
+ *      TODO: set default values if found in session... why doesn't this code work? 
+ * 
+        $options = $this->container->get('fos_user.registration.form.type')->getDefaultOptions(array());
+        $userClass = $options['data_class'];        
+        $user = new $userClass();
+        $session = $this->container->get('request')->getSession();
+        
+        if($session->has('userName'))
+        {
+            $user->setName($session->get('userName'));
+            $form->setData($user);
+        }
+        if($session->has('userEmail'))
+        {
+            $user->setEmail($session->get('userEmail'));
+            $form->setData($user);
+        }
+*/        
         $formHandler = $this->container->get('fos_user.registration.form.handler');
         $confirmationEnabled = $this->container->getParameter('fos_user.registration.confirmation.enabled');
         $approvalEnabled = $this->container->getParameter('fos_user.registration.approval.enabled');

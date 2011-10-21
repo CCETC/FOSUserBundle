@@ -15,6 +15,7 @@ security.login.submit: Login
 profile.show.username: Username
 profile.show.email: Email
 profile.show.firstName: First Name
+profile.show.name: Name
 profile.show.lastName: Last Name
 profile.edit.submit: Update
 profile.flash.updated: The profile has been updated
@@ -69,10 +70,12 @@ fos_user_profile_form_user_username: "Username:"
 fos_user_profile_form_user_email: "Email:"
 fos_user_profile_form_current: "Current Password (for verification):"
 fos_user_profile_form_user_firstName: "First Name:"
+fos_user_profile_form_user_name: "Name:"
 fos_user_profile_form_user_lastName: "Last Name:"
 
 fos_user_registration_form_firstName: "First Name:"
 fos_user_registration_form_lastName: "Last Name:"
+fos_user_registration_form_name: "Name:"
 fos_user_registration_form_username: "Username:"
 fos_user_registration_form_email: "Email:"
 fos_user_registration_form_plainPassword_first: "Password:"

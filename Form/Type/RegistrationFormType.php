@@ -30,10 +30,11 @@ class RegistrationFormType extends AbstractType
     {
         $builder
 //            ->add('username', 'hidden')
-            ->add('firstName')
-            ->add('lastName')
+            ->add('name')
             ->add('email', 'email')
-            ->add('plainPassword', 'repeated', array('type' => 'password'));
+            ->add('plainPassword', 'repeated', array('type' => 'password'))
+            ->setData($user);
+
     }
 
     public function getDefaultOptions(array $options)
