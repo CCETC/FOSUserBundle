@@ -32,8 +32,7 @@ class RegistrationFormType extends AbstractType
 //            ->add('username', 'hidden')
             ->add('name')
             ->add('email', 'email')
-            ->add('plainPassword', 'repeated', array('type' => 'password'))
-            ->setData($user);
+            ->add('plainPassword', 'repeated', array('type' => 'password'));
 
     }
 
