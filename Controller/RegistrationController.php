@@ -34,6 +34,7 @@ class RegistrationController extends ContainerAware
         $applicationTitle = $this->container->get('userSettings')->applicationTitle;
         $adminEmail = $this->container->get('userSettings')->adminEmail;
        
+        $whyRegisterTemplate = $this->container->get('userSettings')->whyRegister;
         
         $form = $this->container->get('fos_user.registration.form');
         
@@ -97,7 +98,8 @@ class RegistrationController extends ContainerAware
             'registrationForm' => $form->createView(),
             'theme' => $this->container->getParameter('fos_user.template.theme'),
             'baseLayout' => $baseLayout,
-            'useBreadcrumb' => $useBreadcrumb            
+            'useBreadcrumb' => $useBreadcrumb,
+            'whyRegisterTemplate' => $whyRegisterTemplate
         ));
     }
 

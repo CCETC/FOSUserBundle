@@ -8,12 +8,14 @@ class Settings {
   public $baseLayout;
   public $useBreadcrumb;
   public $flashName;
+  public $whyRegister;
   
-  public function __construct($applicationTitle, $adminEmail, $baseLayout, $useBreadcrumb, $flashName) {
+  public function __construct($applicationTitle, $adminEmail, $baseLayout, $useBreadcrumb, $flashName, $whyRegister) {
     $this->applicationTitle = $applicationTitle;
     $this->adminEmail = $adminEmail;
     $this->baseLayout = $baseLayout;
     $this->useBreadcrumb = $useBreadcrumb;
     $this->flashName = $flashName;
+    $this->whyRegister = $whyRegister;
   }
 }

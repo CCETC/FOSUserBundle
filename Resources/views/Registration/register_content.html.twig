@@ -1,13 +1,8 @@
 {% form_theme registrationForm theme %}
 
-
-{% if app.session.hasFlash('registrationMessage') %}
-    <div style="background: #ffffcc; padding: 10px; width: 400px; margin: 10px auto; text-align: center;">
-        {{ app.session.getFlash('registrationMessage') }}
-    </div>
+{% if whyRegisterTemplate is defined and whyRegisterTemplate != "" %}
+    {% include whyRegisterTemplate %}
 {% endif %}
-
-</div>
 
 <div class="user-box">
 
