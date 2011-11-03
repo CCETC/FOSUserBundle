@@ -35,7 +35,7 @@ class ResettingController extends ContainerAware
 
         return $this->container->get('templating')->renderResponse('FOSUserBundle:Resetting:request.html.'.$this->getEngine(), array(
             'baseLayout' => $baseLayout,
-            'useBreadcrumb' => $useBreadcrumb                        
+            'useBreadcrumb' => $useBreadcrumb,
         ));
     }
 
@@ -52,7 +52,7 @@ class ResettingController extends ContainerAware
         $user = $this->container->get('fos_user.user_manager')->findUserByUsernameOrEmail($username);
 
         if (null === $user){
-            return $this->container->get('templating')->renderResponse('FOSUserBundle:Resetting:request.html.'.$this->getEngine(), array('invalid_username' => $username));
+            return $this->container->get('templating')->renderResponse('FOSUserBundle:Resetting:request.html.'.$this->getEngine(), array('invalid_username' => $username, 'baseLayout' => $baseLayout, 'useBreadcrumb' => $useBreadcrumb));
         }
 
         if ($user->isPasswordRequestNonExpired($this->container->getParameter('fos_user.resetting.token_ttl'))) {
@@ -99,7 +99,7 @@ class ResettingController extends ContainerAware
         $baseLayout = $this->container->get('userSettings')->baseLayout;
         $useBreadcrumb = $this->container->get('userSettings')->useBreadcrumb;
         $flashName = $this->container->get('userSettings')->flashName;
- 
+        
         $user = $this->container->get('fos_user.user_manager')->findUserByConfirmationToken($token);
 
         if (null === $user){

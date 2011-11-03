@@ -1,10 +1,29 @@
 {% form_theme resetForm theme %}
-<div class="user-box">
+<div class="row">
+    <div class="span10 offset3 form-stacked">
 
-<form action="{{ path('fos_user_resetting_reset', {'token': token}) }}" {{ form_enctype(resetForm) }} method="POST" class="fos_user_resetting_reset">
-    {{ form_widget(resetForm) }}
-    <div>
-        <input class="button" type="submit" value="{{ 'resetting.reset.submit'|trans({}, 'FOSUserBundle') }}" />
+        <form action="{{ path('fos_user_resetting_reset', {'token': token}) }}" {{ form_enctype(resetForm) }} method="POST" class="fos_user_resetting_reset">            
+            {% if form_errors(resetForm.new) %}
+                <div class="alert-message">{{ form_errors(resetForm.new) }}</div>
+            {% endif %}
+               <div class="clearfix">
+                    {{ form_label(resetForm.new.first) }}
+                    <div class="input">
+                        {{ form_widget(resetForm.new.first, { 'attr': {'class': 'span8'} }) }}
+                    </div>
+                </div><!-- /clearfix -->
+                <div class="clearfix">
+                    {{ form_label(resetForm.new.second) }}
+                    <div class="input">
+                        {{ form_widget(resetForm.new.second, { 'attr': {'class': 'span8'} }) }}
+                    </div>
+                </div><!-- /clearfix -->
+                
+                {{ form_rest(resetForm) }}
+            <div class="actions">    
+                <input class="btn primary large" type="submit" value="{{ 'resetting.reset.submit'|trans({}, 'FOSUserBundle') }}" />
+                <a class="btn large" href="{{ path('home') }}">Cancel</a>
+            </div>
+        </form>
     </div>
-</form>
 </div>

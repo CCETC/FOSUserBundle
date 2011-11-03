@@ -22,7 +22,7 @@ profile.flash.updated: The profile has been updated
 
 # Password change
 change_password.submit: Change password
-change_password.flash.success: The password has been changed
+change_password.flash.success: Your password has been changed
 
 # Registration
 registration.check_email: An email has been sent to %email%. It contains an activation link you must click to activate your account.

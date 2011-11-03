@@ -1,7 +1,8 @@
-<div class="user-box">
-    <p><b>{{ 'profile.show.name'|trans({}, 'FOSUserBundle') }}</b>: {{ user.name }}</p>
-    <p><b>{{ 'profile.show.email'|trans({}, 'FOSUserBundle') }}</b>: {{ user.email }}</p>
+<div class="row">
+    <div class="span6">
+        <p><b>{{ 'profile.show.name'|trans({}, 'FOSUserBundle') }}</b>: {{ user.name }}</p>
+        <p><b>{{ 'profile.show.email'|trans({}, 'FOSUserBundle') }}</b>: {{ user.email }}</p>
 
-    <a style="float: right;" href="{{ url('fos_user_profile_edit') }}">Edit Information &rarr;</a>
-    <div>&nbsp;</div>
+        <a class="pull-right btn primary" href="{{ url('fos_user_profile_edit') }}">Edit Information &rarr;</a>
+    </div>
 </div>

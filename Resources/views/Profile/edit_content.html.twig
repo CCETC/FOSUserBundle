@@ -1,22 +1,42 @@
 {% form_theme profileForm theme %}
 
-<div class="user-box">
+<div class="row">
+    <div class="span10 form-stacked">
 
-<form action="{{ path('fos_user_profile_edit') }}" {{ form_enctype(profileForm) }} method="POST" class="fos_user_profile_edit">
-    {{ form_errors(profileForm) }}
-
-    {{ form_row(profileForm.user.name) }}
-    {{ form_row(profileForm.user.email) }}
-    
-    {{ form_rest(profileForm) }}
-    <div>
-        <input class="button" type="submit" value="{{ 'profile.edit.submit'|trans({}, 'FOSUserBundle') }}" />
+        <form action="{{ path('fos_user_profile_edit') }}" {{ form_enctype(profileForm) }} method="POST" class="fos_user_profile_edit">
+            {% if form_errors(profileForm) %}
+                <div class="alert-message">{{ form_errors(profileForm) }}</div>
+            {% endif %}
+                <div class="clearfix">
+                    {{ form_label(profileForm.user.name) }}
+                    <div class="input">
+                        {{ form_widget(profileForm.user.name, { 'attr': {'class': 'span8'} }) }}
+                    </div>
+                </div><!-- /clearfix -->
+                <div class="clearfix">
+                    {{ form_label(profileForm.user.email) }}
+                    <div class="input">
+                        {{ form_widget(profileForm.user.email, { 'attr': {'class': 'span8'} }) }}
+                    </div>
+                </div><!-- /clearfix -->
+                <div class="clearfix">
+                    {{ form_label(profileForm.current) }}
+                    <div class="input">
+                        {{ form_widget(profileForm.current, { 'attr': {'class': 'span8'} }) }}
+                    </div>
+                </div><!-- /clearfix -->
+                
+                {{ form_rest(profileForm) }}
+            <div class="actions">
+                <input class="btn primary large" type="submit" value="{{ 'profile.edit.submit'|trans({}, 'FOSUserBundle') }}" />
+                <a href="{{ url('fos_user_profile_show') }}" class="btn large">Cancel</a>
+            </div>
+        </form>
+        
     </div>
-    <br/>
-</form>
-
+        
 </div>
 
-<div style="width: 100%; text-align: center; margin-top: 10px;">
-<a style="font-size: 14px;" href="{{ url('fos_user_change_password') }}">Change Password &rarr;</a>
+<div class="row" style="text-align: center; margin-top: 10px;">
+    <a style="font-size: 14px;" href="{{ url('fos_user_change_password') }}">Change Password &rarr;</a>
 </div>

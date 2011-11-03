@@ -1,6 +1,6 @@
 {% extends baseLayout %}
 
-{% if useBreadcrumb %}
+{% if useBreadcrumb is defined and useBreadcrumb %}
     {% block breadcrumb %}
         Reset Password
     {% endblock %}
