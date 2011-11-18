@@ -29,7 +29,7 @@ class ProfileController extends ContainerAware
     public function showAction()
     {
         $baseLayout = $this->container->get('userSettings')->baseLayout;
-        $useBreadcrumb = $this->container->get('userSettings')->useBreadcrumb;
+        $usePageHeader = $this->container->get('userSettings')->usePageHeader;
         $flashName = $this->container->get('userSettings')->flashName;
 
         $user = $this->container->get('security.context')->getToken()->getUser();
@@ -40,7 +40,7 @@ class ProfileController extends ContainerAware
         return $this->container->get('templating')->renderResponse('FOSUserBundle:Profile:show.html.'.$this->container->getParameter('fos_user.template.engine'), array(
             'user' => $user,
             'baseLayout' => $baseLayout,
-            'useBreadcrumb' => $useBreadcrumb
+            'usePageHeader' => $usePageHeader,
         ));
     }
 
@@ -50,7 +50,7 @@ class ProfileController extends ContainerAware
     public function editAction()
     {
         $baseLayout = $this->container->get('userSettings')->baseLayout;
-        $useBreadcrumb = $this->container->get('userSettings')->useBreadcrumb;
+        $usePageHeader = $this->container->get('userSettings')->usePageHeader;
         $flashName = $this->container->get('userSettings')->flashName;
 
         $user = $this->container->get('security.context')->getToken()->getUser();
@@ -74,7 +74,7 @@ class ProfileController extends ContainerAware
                 'profileForm' => $form->createView(),
                 'theme' => $this->container->getParameter('fos_user.template.theme'),
                 'baseLayout' => $baseLayout,
-                'useBreadcrumb' => $useBreadcrumb
+                'usePageHeader' => $usePageHeader,
             )
         );
     }

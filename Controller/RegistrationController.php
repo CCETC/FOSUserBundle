@@ -29,7 +29,7 @@ class RegistrationController extends ContainerAware
     public function registerAction()
     {
         $baseLayout = $this->container->get('userSettings')->baseLayout;
-        $useBreadcrumb = $this->container->get('userSettings')->useBreadcrumb;
+        $usePageHeader = $this->container->get('userSettings')->usePageHeader;
         $flashName = $this->container->get('userSettings')->flashName;
         $applicationTitle = $this->container->get('userSettings')->applicationTitle;
         $adminEmail = $this->container->get('userSettings')->adminEmail;
@@ -98,7 +98,7 @@ class RegistrationController extends ContainerAware
             'registrationForm' => $form->createView(),
             'theme' => $this->container->getParameter('fos_user.template.theme'),
             'baseLayout' => $baseLayout,
-            'useBreadcrumb' => $useBreadcrumb,
+            'usePageHeader' => $usePageHeader,
             'whyRegisterTemplate' => $whyRegisterTemplate
         ));
     }

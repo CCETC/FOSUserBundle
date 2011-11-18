@@ -56,10 +56,7 @@ class ProfileFormType extends AbstractType
     protected function buildUserForm(FormBuilder $builder, array $options)
     {
         $builder
-            ->add('firstName')
-            ->add('lastName')
-            ->add('organization')
-            ->add('county', 'choice', array('choices' => array('Tompkins' => 'Tompkins', 'Broome' => 'Broome')))
+            ->add('name')
             ->add('email', 'email')
         ;
     }

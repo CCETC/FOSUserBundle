@@ -30,7 +30,7 @@ class ChangePasswordController extends ContainerAware
     public function changePasswordAction()
     {
         $baseLayout = $this->container->get('userSettings')->baseLayout;
-        $useBreadcrumb = $this->container->get('userSettings')->useBreadcrumb;
+        $usePageHeader = $this->container->get('userSettings')->usePageHeader;
         $flashName = $this->container->get('userSettings')->flashName;
         
         $user = $this->container->get('security.context')->getToken()->getUser();
@@ -54,8 +54,7 @@ class ChangePasswordController extends ContainerAware
                 'changePasswordForm' => $form->createView(),
                 'theme' => $this->container->getParameter('fos_user.template.theme'),
                 'baseLayout' => $baseLayout,
-                'useBreadcrumb' => $useBreadcrumb,
-                    
+                'usePageHeader' => $usePageHeader,
             )
         );
     }

@@ -1,13 +1,13 @@
 {% extends baseLayout %}
 
-{% if useBreadcrumb is defined and useBreadcrumb %}
-    {% block breadcrumb %}
+{% if usePageHeader %}
+    {% block page_header %}
         Reset Password
     {% endblock %}
 {% endif %}
 
 {% block content %}
-{% if not useBreadcrumb %}
+{% if not usePageHeader %}
         <h1>Reset Password</h1>
 {% endif %}
 

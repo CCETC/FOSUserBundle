@@ -8,27 +8,9 @@
                 <div class="alert-message">{{ form_errors(profileForm) }}</div>
             {% endif %}
                 <div class="clearfix">
-                    {{ form_label(profileForm.user.firstName) }}
+                    {{ form_label(profileForm.user.name) }}
                     <div class="input">
-                        {{ form_widget(profileForm.user.firstName, { 'attr': {'class': 'span8'} }) }}
-                    </div>
-                </div><!-- /clearfix -->
-                <div class="clearfix">
-                    {{ form_label(profileForm.user.lastName) }}
-                    <div class="input">
-                        {{ form_widget(profileForm.user.lastName, { 'attr': {'class': 'span8'} }) }}
-                    </div>
-                </div><!-- /clearfix -->
-                <div class="clearfix">
-                    {{ form_label(profileForm.user.organization) }}
-                    <div class="input">
-                        {{ form_widget(profileForm.user.organization, { 'attr': {'class': 'span8'} }) }}
-                    </div>
-                </div><!-- /clearfix -->
-                <div class="clearfix">
-                    {{ form_label(profileForm.user.county) }}
-                    <div class="input">
-                        {{ form_widget(profileForm.user.county, { 'attr': {'class': 'span8'} }) }}
+                        {{ form_widget(profileForm.user.name, { 'attr': {'class': 'span8'} }) }}
                     </div>
                 </div><!-- /clearfix -->
                 <div class="clearfix">

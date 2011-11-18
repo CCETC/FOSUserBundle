@@ -20,7 +20,7 @@ class SecurityController extends ContainerAware
     public function loginAction()
     {
         $baseLayout = $this->container->get('userSettings')->baseLayout;
-        $useBreadcrumb = $this->container->get('userSettings')->useBreadcrumb;
+        $usePageHeader = $this->container->get('userSettings')->usePageHeader;
         
         $ua = $_SERVER['HTTP_USER_AGENT'];
 	if((!isset($_SESSION['ie6_message']) || $_SESSION['ie6_message'] == true) && preg_match('/\bmsie 6/i', $ua) && !preg_match('/\bopera/i', $ua)) {
@@ -75,7 +75,7 @@ class SecurityController extends ContainerAware
             'error'         => $error,
             'usingIE6'  => $usingIE6,
             'baseLayout' => $baseLayout,
-            'useBreadcrumb' => $useBreadcrumb
+            'usePageHeader' => $usePageHeader
         ));
     }
 

@@ -31,11 +31,11 @@ class ResettingController extends ContainerAware
     public function requestAction()
     {
         $baseLayout = $this->container->get('userSettings')->baseLayout;
-        $useBreadcrumb = $this->container->get('userSettings')->useBreadcrumb;
+        $usePageHeader = $this->container->get('userSettings')->usePageHeader;
 
         return $this->container->get('templating')->renderResponse('FOSUserBundle:Resetting:request.html.'.$this->getEngine(), array(
             'baseLayout' => $baseLayout,
-            'useBreadcrumb' => $useBreadcrumb,
+            'usePageHeader' => $usePageHeader,
         ));
     }
 
@@ -47,7 +47,7 @@ class ResettingController extends ContainerAware
         $username = $this->container->get('request')->request->get('username');
         $flashName = $this->container->get('userSettings')->flashName;
         $baseLayout = $this->container->get('userSettings')->baseLayout;
-        $useBreadcrumb = $this->container->get('userSettings')->useBreadcrumb;
+        $usePageHeader = $this->container->get('userSettings')->usePageHeader;
 
         $user = $this->container->get('fos_user.user_manager')->findUserByUsernameOrEmail($username);
 
@@ -97,7 +97,7 @@ class ResettingController extends ContainerAware
     public function resetAction($token)
     {
         $baseLayout = $this->container->get('userSettings')->baseLayout;
-        $useBreadcrumb = $this->container->get('userSettings')->useBreadcrumb;
+        $usePageHeader = $this->container->get('userSettings')->usePageHeader;
         $flashName = $this->container->get('userSettings')->flashName;
         
         $user = $this->container->get('fos_user.user_manager')->findUserByConfirmationToken($token);
@@ -126,7 +126,7 @@ class ResettingController extends ContainerAware
             'resetForm' => $form->createView(),
             'theme' => $this->container->getParameter('fos_user.template.theme'),
             'baseLayout' => $baseLayout,
-            'useBreadcrumb' => $useBreadcrumb            
+            'usePageHeader' => $usePageHeader,
         ));
     }
 

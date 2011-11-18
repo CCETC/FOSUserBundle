@@ -18,8 +18,6 @@ profile.show.firstName: First Name
 profile.show.name: Name
 profile.show.lastName: Last Name
 profile.edit.submit: Update
-profile.show.organization: Organization
-profile.show.county: County Working In
 profile.flash.updated: The profile has been updated
 
 # Password change
@@ -74,18 +72,14 @@ fos_user_profile_form_current: "Current Password (for verification):"
 fos_user_profile_form_user_firstName: "First Name:"
 fos_user_profile_form_user_name: "Name:"
 fos_user_profile_form_user_lastName: "Last Name:"
-fos_user_profile_form_user_county: "County:"
-fos_user_profile_form_user_organization: "Organization:"
 
+fos_user_registration_form_firstName: "First Name:"
+fos_user_registration_form_lastName: "Last Name:"
 fos_user_registration_form_name: "Name:"
 fos_user_registration_form_username: "Username:"
 fos_user_registration_form_email: "Email:"
 fos_user_registration_form_plainPassword_first: "Password:"
 fos_user_registration_form_plainPassword_second: "Verify password:"
-fos_user_registration_form_firstName: "First Name:"
-fos_user_registration_form_lastName: "Last Name:"
-fos_user_registration_form_organization: "Organization:"
-fos_user_registration_form_county: "County working in:"
 
 fos_user_resetting_form_new_first: "New password:"
 fos_user_resetting_form_new_second: "Verify new password:"

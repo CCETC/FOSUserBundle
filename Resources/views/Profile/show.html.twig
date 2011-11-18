@@ -1,13 +1,13 @@
 {% extends baseLayout %}
 
-{% if useBreadcrumb %}
-    {% block breadcrumb %}
+{% if usePageHeader %}
+    {% block page_header %}
         Information
     {% endblock %}
 {% endif %}
 
 {% block content %}
-{% if not useBreadcrumb %}
+{% if not usePageHeader %}
         <h1>Information</h1>
 {% endif %}
 {% include "FOSUserBundle:Profile:show_content.html.twig" %}

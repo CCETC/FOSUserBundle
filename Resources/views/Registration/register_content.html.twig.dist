@@ -10,27 +10,9 @@
                     <div class="alert-message">{{ form_errors(registrationForm) }}</div>
                 {% endif %}
                 <div class="clearfix">
-                    {{ form_label(registrationForm.firstName) }}
+                    {{ form_label(registrationForm.name) }}
                     <div class="input">
-                        {{ form_widget(registrationForm.firstName, { 'attr': {'class': 'span8'} }) }}
-                    </div>
-                </div><!-- /clearfix -->
-                <div class="clearfix">
-                    {{ form_label(registrationForm.lastName) }}
-                    <div class="input">
-                        {{ form_widget(registrationForm.lastName, { 'attr': {'class': 'span8'} }) }}
-                    </div>
-                </div><!-- /clearfix -->
-                <div class="clearfix">
-                    {{ form_label(registrationForm.organization) }}
-                    <div class="input">
-                        {{ form_widget(registrationForm.organization, { 'attr': {'class': 'span8'} }) }}
-                    </div>
-                </div><!-- /clearfix -->
-                <div class="clearfix">
-                    {{ form_label(registrationForm.county) }}
-                    <div class="input">
-                        {{ form_widget(registrationForm.county, { 'attr': {'class': 'span8'} }) }}
+                        {{ form_widget(registrationForm.name, { 'attr': {'class': 'span8'} }) }}
                     </div>
                 </div><!-- /clearfix -->
                 <div class="clearfix">

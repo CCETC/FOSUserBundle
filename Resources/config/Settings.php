@@ -6,15 +6,15 @@ class Settings {
   public $applicationTitle;
   public $adminEmail;
   public $baseLayout;
-  public $useBreadcrumb;
+  public $usePageHeader;
   public $flashName;
   public $whyRegister;
   
-  public function __construct($applicationTitle, $adminEmail, $baseLayout, $useBreadcrumb, $flashName, $whyRegister) {
+  public function __construct($applicationTitle, $adminEmail, $baseLayout, $usePageHeader, $flashName, $whyRegister = null) {
     $this->applicationTitle = $applicationTitle;
     $this->adminEmail = $adminEmail;
     $this->baseLayout = $baseLayout;
-    $this->useBreadcrumb = $useBreadcrumb;
+    $this->usePageHeader = $usePageHeader;
     $this->flashName = $flashName;
     $this->whyRegister = $whyRegister;
   }
