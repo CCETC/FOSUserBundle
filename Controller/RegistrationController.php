@@ -73,13 +73,14 @@ class RegistrationController extends ContainerAware
             if($approvalEnabled)
             {
                 $this->setFlash($flashName, 'Your account has been created.  Before you can log in an admin must verify your account.');
-                $route = 'home';
+                echo $flashName;
+                $route = 'fos_user_security_login';
             }
             else if($confirmationEnabled)
             {
                 $this->container->get('session')->set('fos_user_send_confirmation_email/email', $user->getEmail());
                 $this->setFlash($flashName, 'Your account has been created.  An e-mail has been sent to '.$user->getEmail().'.  Follow the instructions in the e-mail to activate your account.');
-                $route = 'home';
+                $route = 'fos_user_security_login';
             }
             else
             {
