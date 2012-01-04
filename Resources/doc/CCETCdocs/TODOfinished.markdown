@@ -1,6 +1,6 @@
 # CCETC/FOSUserBundle - TODOfinished
 
-# 1.0
+## 1.0
 1. Registration
 	- automatic
 	- verification
