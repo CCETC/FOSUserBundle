@@ -1,0 +1,22 @@
+# CCETC/FOSUserBundle - TODOfinished
+
+# 1.0
+1. Registration
+	- automatic
+	- verification
+	- approval
+2. Login		
+3. Reset Password		
+4. Profile
+4b.	change password
+5. clean up css
+6. config
+	- app name
+	- support email
+	- template
+	- flash
+7.	Admin Integration
+	- admin approval e-mail link to unapproved users
+	- approval interface				
+		- finish approve action
+		- batch approve action
