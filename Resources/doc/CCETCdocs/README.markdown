@@ -9,6 +9,12 @@ This bundle is used in all CCETC Symfony web applications.
 - improved layout and design using Twitter's bootstrap
 - added a "approval" option to registration that only lets users log in one an admin has approved them
 - hid all uses of username and default to e-mail address as the username
+- files with specific fields (profile, register, etc) included with .dist versions to allow for easy customization
 
 ## Dependencies
-- CCETCBootstrapBundle
+- Twitter's bootstrap
+
+## Installation
+TODO: document installation
+	- dist files
+
