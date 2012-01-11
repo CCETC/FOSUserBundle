@@ -62,7 +62,8 @@ class ChangePasswordController extends ContainerAware
     /**
      * Generate the redirection url when the resetting is completed.
      *
-     * @param UserInterface $user
+     * @param \FOS\UserBundle\Model\UserInterface $user
+     *
      * @return string
      */
     protected function getRedirectionUrl(UserInterface $user)

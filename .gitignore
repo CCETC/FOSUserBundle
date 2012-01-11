@@ -8,3 +8,8 @@ Resources/translations/FOSUserBundle.en.yml
 Resources/views/Profile/edit_content.html.twig
 Resources/views/Profile/show_content.html.twig
 Resources/views/Registration/register_content.html.twig
+Propel/om/*
+Propel/map/*
+
+vendor/*
+!vendor/vendors.php

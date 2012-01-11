@@ -70,12 +70,15 @@ class SecurityController extends ContainerAware
         // last username entered by the user
         $lastUsername = (null === $session) ? '' : $session->get(SecurityContext::LAST_USERNAME);
 
+        $csrfToken = $this->container->get('form.csrf_provider')->generateCsrfToken('authenticate');
+
         return $this->container->get('templating')->renderResponse('FOSUserBundle:Security:login.html.'.$this->container->getParameter('fos_user.template.engine'), array(
             'last_username' => $lastUsername,
             'error'         => $error,
             'usingIE6'  => $usingIE6,
             'baseLayout' => $baseLayout,
-            'usePageHeader' => $usePageHeader
+            'usePageHeader' => $usePageHeader,
+            'csrf_token' => $csrfToken,
         ));
     }
 

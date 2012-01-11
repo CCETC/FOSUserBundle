@@ -35,10 +35,25 @@ class Configuration implements ConfigurationInterface
         $treeBuilder = new TreeBuilder();
         $rootNode = $treeBuilder->root('fos_user');
 
+        $supportedDrivers = array('orm', 'mongodb', 'couchdb', 'propel', 'custom');
+
         $rootNode
+            ->validate()
+                ->ifTrue(function($v){return 'propel' === $v['db_driver'] && empty($v['propel_user_class']);})
+                ->thenInvalid('The propel model class must be defined by using the "propel_user_class" key.')
+            ->end()
             ->children()
-                ->scalarNode('db_driver')->cannotBeOverwritten()->isRequired()->cannotBeEmpty()->end()
+                ->scalarNode('db_driver')
+                    ->validate()
+                        ->ifNotInArray($supportedDrivers)
+                        ->thenInvalid('The driver %s is not supported. Please choose one of '.json_encode($supportedDrivers))
+                    ->end()
+                    ->cannotBeOverwritten()
+                    ->isRequired()
+                    ->cannotBeEmpty()
+                ->end()
                 ->scalarNode('user_class')->isRequired()->cannotBeEmpty()->end()
+                ->scalarNode('propel_user_class')->end()
                 ->scalarNode('firewall_name')->isRequired()->cannotBeEmpty()->end()
                 ->scalarNode('model_manager_name')->defaultNull()->end()
                 ->booleanNode('use_listener')->defaultTrue()->end()
@@ -50,6 +65,15 @@ class Configuration implements ConfigurationInterface
                         ->scalarNode('sender_name')->defaultValue('webmaster')->cannotBeEmpty()->end()
                     ->end()
                 ->end()
+            ->end()
+            // Using the custom driver requires changing the manager services
+            ->validate()
+                ->ifTrue(function($v){return 'custom' === $v['db_driver'] && 'fos_user.user_manager.default' === $v['service']['user_manager'];})
+                ->thenInvalid('You need to specify your own user manager service when using the "custom" driver.')
+            ->end()
+            ->validate()
+                ->ifTrue(function($v){return 'custom' === $v['db_driver'] && !empty($v['group']) && 'fos_user.group_manager.default' === $v['group']['group_manager'];})
+                ->thenInvalid('You need to specify your own group manager service when using the "custom" driver.')
             ->end();
 
         $this->addProfileSection($rootNode);
@@ -57,7 +81,6 @@ class Configuration implements ConfigurationInterface
         $this->addRegistrationSection($rootNode);
         $this->addResettingSection($rootNode);
         $this->addServiceSection($rootNode);
-        $this->addEncoderSection($rootNode);
         $this->addTemplateSection($rootNode);
         $this->addGroupSection($rootNode);
 
@@ -80,7 +103,7 @@ class Configuration implements ConfigurationInterface
                                 ->scalarNode('name')->defaultValue('fos_user_profile_form')->cannotBeEmpty()->end()
                                 ->arrayNode('validation_groups')
                                     ->prototype('scalar')->end()
-                                    ->defaultValue(array('Profile'))
+                                    ->defaultValue(array('Profile', 'Default'))
                                 ->end()
                             ->end()
                         ->end()
@@ -133,7 +156,7 @@ class Configuration implements ConfigurationInterface
                                 ->scalarNode('name')->defaultValue('fos_user_registration_form')->cannotBeEmpty()->end()
                                 ->arrayNode('validation_groups')
                                     ->prototype('scalar')->end()
-                                    ->defaultValue(array('Registration'))
+                                    ->defaultValue(array('Registration', 'Default'))
                                 ->end()
                             ->end()
                         ->end()
@@ -172,7 +195,7 @@ class Configuration implements ConfigurationInterface
                                 ->scalarNode('name')->defaultValue('fos_user_resetting_form')->cannotBeEmpty()->end()
                                 ->arrayNode('validation_groups')
                                     ->prototype('scalar')->end()
-                                    ->defaultValue(array('ResetPassword'))
+                                    ->defaultValue(array('ResetPassword', 'Default'))
                                 ->end()
                             ->end()
                         ->end()
@@ -197,7 +220,7 @@ class Configuration implements ConfigurationInterface
                                 ->scalarNode('name')->defaultValue('fos_user_change_password_form')->cannotBeEmpty()->end()
                                 ->arrayNode('validation_groups')
                                     ->prototype('scalar')->end()
-                                    ->defaultValue(array('ChangePassword'))
+                                    ->defaultValue(array('ChangePassword', 'Default'))
                                 ->end()
                             ->end()
                         ->end()
@@ -215,25 +238,10 @@ class Configuration implements ConfigurationInterface
                     ->addDefaultsIfNotSet()
                         ->children()
                             ->scalarNode('mailer')->defaultValue('fos_user.mailer.default')->end()
-                            ->scalarNode('email_canonicalizer')->defaultValue('fos_user.util.email_canonicalizer.default')->end()
-                            ->scalarNode('username_canonicalizer')->defaultValue('fos_user.util.username_canonicalizer.default')->end()
+                            ->scalarNode('email_canonicalizer')->defaultValue('fos_user.util.canonicalizer.default')->end()
+                            ->scalarNode('username_canonicalizer')->defaultValue('fos_user.util.canonicalizer.default')->end()
                             ->scalarNode('user_manager')->defaultValue('fos_user.user_manager.default')->end()
                         ->end()
-                    ->end()
-                ->end()
-            ->end();
-    }
-
-    private function addEncoderSection(ArrayNodeDefinition $node)
-    {
-        $node
-            ->children()
-                ->arrayNode('encoder')
-                    ->addDefaultsIfNotSet()
-                    ->children()
-                        ->scalarNode('algorithm')->defaultValue('sha512')->end()
-                        ->booleanNode('encode_as_base64')->defaultFalse()->end()
-                        ->scalarNode('iterations')->defaultValue(1)->end()
                     ->end()
                 ->end()
             ->end();
@@ -270,7 +278,7 @@ class Configuration implements ConfigurationInterface
                                 ->scalarNode('name')->defaultValue('fos_user_group_form')->cannotBeEmpty()->end()
                                 ->arrayNode('validation_groups')
                                     ->prototype('scalar')->end()
-                                    ->defaultValue(array('Registration'))
+                                    ->defaultValue(array('Registration', 'Default'))
                                 ->end()
                             ->end()
                         ->end()

@@ -64,7 +64,7 @@ $ php bin/vendors install
 
 **Using submodules**
 
-If you prefer instead to use git submodules, the run the following:
+If you prefer instead to use git submodules, then run the following:
 
 ``` bash
 $ git submodule add git://github.com/FriendsOfSymfony/FOSUserBundle.git vendor/bundles/FOS/UserBundle
@@ -109,11 +109,16 @@ MongoDB, CouchDB, etc). Your first job, then, is to create the `User` class
 for your application. This class can look and act however you want: add any
 properties or methods you find useful. This is *your* `User` class.
 
-This class has just two requirements, which allow it to take advantage of
-all of the functionality in the FOSUserBundle:
+The bundle provides base classes which are already mapped for most fields
+to make it easier to create your entity. Here is how you use it:
 
-1. It must extend one of the base `User` classes from the bundle
-2. It must have an `id` field
+1. Extend the base `User` class (the class to use depends of your storage)
+2. Map the `id` field. It must be protected as it is inherited from the parent class.
+
+**Warning:**
+
+> When you extend from the mapped superclass provided by the bundle, don't
+> redefine the mapping for the other fields as it is provided by the bundle.
 
 In the following sections, you'll see examples of how your `User` class should
 look, depending on how you're storing your users (Doctrine ORM, MongoDB ODM,
@@ -235,6 +240,23 @@ class User extends BaseUser
 }
 ```
 
+**d) Propel User class**
+
+When using Propel, the `FOS\UserBundle\Model\UserInterface` is implemented
+by a proxy object.
+If you don't want to add your own logic in your user class, you can simply use
+`FOS\UserBundle\Propel\UserProxy` as proxy user class and `FOS\UserBundle\Propel\User`
+as model class in your configuration (see step 6) and you don't have to create
+another class.
+
+If you want to add your own fields, you can extend the model class by overriding the database schema.
+Just copy the `Resources/config/propel/schema.xml` file to `app/Resources/FOSUserBundle/config/propel/schema.xml`,
+and customize it to fit your needs.
+Due to an issue with the Form component that does not support using `__call` to
+access properties, you will have to extend the proxy class as well to support these fields. For instance, if you've
+added a `website_url` attribute to the overrided schema, you'll need to declare both `getWebsiteUrl()` and
+`setWebsiteUrl()` methods in your own proxy class (just forward methods to the `user` attribute).
+
 ### Step 5: Configure your application's security.yml
 
 In order for Symfony's security component to use the FOSUserBundle, you must
@@ -251,11 +273,15 @@ security:
         fos_userbundle:
             id: fos_user.user_manager
 
+    encoders:
+        "FOS\UserBundle\Model\UserInterface": sha512
+
     firewalls:
         main:
             pattern: ^/
             form_login:
                 provider: fos_userbundle
+                csrf_provider: form.csrf_provider
             logout:       true
             anonymous:    true
 
@@ -320,7 +346,7 @@ of datastore you are using.
 ``` yaml
 # app/config/config.yml
 fos_user:
-    db_driver: orm # other valid values are 'mongodb', 'couchdb'
+    db_driver: orm # other valid values are 'mongodb', 'couchdb' and 'propel'
     firewall_name: main
     user_class: Acme\UserBundle\Entity\User
 ```
@@ -341,9 +367,22 @@ Or if you prefer XML:
 
 Only three configuration values are required to use the bundle:
 
-* The type of datastore you are using (`orm`, `mongodb`, or `couchdb`).
+* The type of datastore you are using (`orm`, `mongodb`, `couchdb` or `propel`).
 * The firewall name which you configured in Step 5.
-* The fully qualified class name (FQCN) of the `User` class which you created in Step 2
+* The fully qualified class name (FQCN) of the `User` class which you created in Step 4.
+
+**Note:**
+
+> When using Propel, the `user_class` key refers to the proxy class implementing
+> the FOSUserBundle interface. Thus, a fourth key named `propel_user_class`
+> is also required, refering to the actual model class.
+
+**Warning:**
+
+> When using one of the Doctrine implementation, you need either to use the
+> `auto_mapping` option of the corresponding bundle (done by default for
+> DoctrineBundle in the standard distribution) or to activate the mapping
+> for FOSUserBundle otherwise the base mapping will be ignored.
 
 ### Step 7: Import FOSUserBundle routing files
 
@@ -374,7 +413,7 @@ fos_user_resetting:
 
 fos_user_change_password:
     resource: "@FOSUserBundle/Resources/config/routing/change_password.xml"
-    prefix: /change-password
+    prefix: /profile
 ```
 
 Or if you prefer XML:
@@ -385,7 +424,7 @@ Or if you prefer XML:
 <import resource="@FOSUserBundle/Resources/config/routing/profile.xml" prefix="/profile" />
 <import resource="@FOSUserBundle/Resources/config/routing/registration.xml" prefix="/register" />
 <import resource="@FOSUserBundle/Resources/config/routing/resetting.xml" prefix="/resetting" />
-<import resource="@FOSUserBundle/Resources/config/routing/change_password.xml" prefix="/change-password" />
+<import resource="@FOSUserBundle/Resources/config/routing/change_password.xml" prefix="/profile" />
 ```
 
 **Note:**
@@ -411,6 +450,39 @@ For MongoDB users you can run the following command to create the indexes.
 $ php app/console doctrine:mongodb:schema:create --index
 ```
 
+For Propel users you have to install the [TypehintableBehavior](https://github.com/willdurand/TypehintableBehavior) before to
+build your model. First, install it:
+
+By using Git submodules:
+
+``` bash
+$ git submodule add http://github.com/willdurand/TypehintableBehavior.git vendor/propel-behaviors/TypehintableBehavior
+```
+
+By using the Symfony2 vendor management:
+
+```
+[TypehintableBehavior]
+    git=http://github.com/willdurand/TypehintableBehavior.git
+    target=/propel-behaviors/TypehintableBehavior
+```
+
+Then, register it:
+
+``` ini
+# app/config/propel.ini
+propel.behavior.typehintable.class = vendor.propel-behaviors.TypehintableBehavior.src.TypehintableBehavior
+```
+
+You now can run the following command to create the model:
+
+``` bash
+$ php app/console propel:build-model
+```
+
+> To create SQL, run the command `propel:build-sql` and insert it or use migration commands if you have an existing schema in your database.
+
+
 You now can login at `http://app.com/app_dev.php/login`!
 
 ### Next Steps
@@ -421,9 +493,17 @@ of the bundle.
 
 The following documents are available:
 
-1. [Overriding Templates](https://github.com/FriendsOfSymfony/FOSUserBundle/blob/master/Resources/doc/overriding_templates.md)
-2. [Overriding Controllers](https://github.com/FriendsOfSymfony/FOSUserBundle/blob/master/Resources/doc/overriding_controllers.md)
-3. [Overriding Forms](https://github.com/FriendsOfSymfony/FOSUserBundle/blob/master/Resources/doc/overriding_forms.md)
-4. [Command Line Tools](https://github.com/FriendsOfSymfony/FOSUserBundle/blob/master/Resources/doc/command_line_tools.md)
-5. [Supplemental Documenation](https://github.com/FriendsOfSymfony/FOSUserBundle/blob/master/Resources/doc/supplemental.md)
-6. [Configuration Reference](https://github.com/FriendsOfSymfony/FOSUserBundle/blob/master/Resources/doc/configuration_reference.md)
+- [Overriding Templates](overriding_templates.md)
+- [Overriding Controllers](overriding_controllers.md)
+- [Overriding Forms](overriding_forms.md)
+- [Using the UserManager](user_manager.md)
+- [Command Line Tools](command_line_tools.md)
+- [Logging by username or email](logging_by_username_or_email.md)
+- [Transforming a username to a user in forms](form_type.md)
+- [Emails](emails.md)
+- [Using the groups](groups.md)
+- [More about the Doctrine implementations](doctrine.md)
+- [Supplemental Documenation](supplemental.md)
+- [Replacing the canonicalizer](canonicalizer.md)
+- [Using a custom storage layer](custom_storage_layer.md)
+- [Configuration Reference](configuration_reference.md)

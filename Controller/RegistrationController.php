@@ -136,6 +136,7 @@ class RegistrationController extends ContainerAware
 
         $user->setConfirmationToken(null);
         $user->setEnabled(true);
+        $user->setLastLogin(new \DateTime());
 
         $this->container->get('fos_user.user_manager')->updateUser($user);
         $this->authenticateUser($user);
@@ -166,7 +167,7 @@ class RegistrationController extends ContainerAware
     /**
      * Authenticate a user with Symfony Security
      *
-     * @param Boolean $reAuthenticate
+     * @param \FOS\UserBundle\Model\UserInterface $user
      */
     protected function authenticateUser(UserInterface $user)
     {

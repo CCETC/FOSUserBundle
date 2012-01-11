@@ -18,6 +18,7 @@
         {% endif %}
 
         <form action="{{ path("fos_user_security_check") }}" method="post">
+            <input type="hidden" name="_csrf_token" value="{{ csrf_token }}" />
             <div class="clearfix">
                 <label for="username">{{ 'security.login.username'|trans({}, 'FOSUserBundle') }}</label>
                 <div class="input">
@@ -50,7 +51,6 @@
     <a href="{{ url("fos_user_registration_register") }}">Register</a> |
     <a href="{{ url("fos_user_resetting_request") }}">Forgot your password?</a>
 </div>            
-
 
 {% endblock content %}
 

@@ -25,6 +25,8 @@ use FOS\UserBundle\Model\UserInterface;
  */
 class ResettingController extends ContainerAware
 {
+    const SESSION_EMAIL = 'fos_user_send_resetting_email/email';
+
     /**
      * Request reset user password: show form
      */
@@ -64,7 +66,7 @@ class ResettingController extends ContainerAware
         $applicationTitle = $this->container->get('userSettings')->applicationTitle;
         $adminEmail = $this->container->get('userSettings')->adminEmail;
         
-        $this->container->get('session')->set('fos_user_send_resetting_email/email', $user->getEmail());
+        $this->container->get('session')->set(static::SESSION_EMAIL, $this->getObfuscatedEmail($user));
         $this->container->get('fos_user.mailer')->sendResettingEmailMessage($user, $applicationTitle, $adminEmail);
         $user->setPasswordRequestedAt(new \DateTime());
         $this->container->get('fos_user.user_manager')->updateUser($user);
@@ -79,15 +81,16 @@ class ResettingController extends ContainerAware
     public function checkEmailAction()
     {
         $session = $this->container->get('session');
-        $email = $session->get('fos_user_send_resetting_email/email');
-        $session->remove('fos_user_send_resetting_email/email');
-        $user = $this->container->get('fos_user.user_manager')->findUserByEmail($email);
-        if (empty($user)) {
+        $email = $session->get(static::SESSION_EMAIL);
+        $session->remove(static::SESSION_EMAIL);
+
+        if (empty($email)) {
+            // the user does not come from the sendEmail action
             return new RedirectResponse($this->container->get('router')->generate('fos_user_resetting_request'));
         }
 
         return $this->container->get('templating')->renderResponse('FOSUserBundle:Resetting:checkEmail.html.'.$this->getEngine(), array(
-            'user' => $user,
+            'email' => $email,
         ));
     }
 
@@ -102,7 +105,7 @@ class ResettingController extends ContainerAware
         
         $user = $this->container->get('fos_user.user_manager')->findUserByConfirmationToken($token);
 
-        if (null === $user){
+        if (null === $user) {
             throw new NotFoundHttpException(sprintf('The user with "confirmation token" does not exist for value "%s"', $token));
         }
 
@@ -128,6 +131,50 @@ class ResettingController extends ContainerAware
             'baseLayout' => $baseLayout,
             'usePageHeader' => $usePageHeader,
         ));
+    }
+
+    /**
+     * Authenticate a user with Symfony Security
+     *
+     * @param \FOS\UserBundle\Model\UserInterface $user
+     */
+    protected function authenticateUser(UserInterface $user)
+    {
+        $providerKey = $this->container->getParameter('fos_user.firewall_name');
+        $token = new UsernamePasswordToken($user, null, $providerKey, $user->getRoles());
+
+        $this->container->get('security.context')->setToken($token);
+    }
+
+    /**
+     * Generate the redirection url when the resetting is completed.
+     *
+     * @param \FOS\UserBundle\Model\UserInterface $user
+     *
+     * @return string
+     */
+    protected function getRedirectionUrl(UserInterface $user)
+    {
+        return $this->container->get('router')->generate('fos_user_profile_show');
+    }
+
+    /**
+     * Get the truncated email displayed when requesting the resetting.
+     *
+     * The default implementation only keeps the part following @ in the address.
+     *
+     * @param \FOS\UserBundle\Model\UserInterface $user
+     *
+     * @return string
+     */
+    protected function getObfuscatedEmail(UserInterface $user)
+    {
+        $email = $user->getEmail();
+        if (false !== $pos = strpos($email, '@')) {
+            $email = '...' . substr($email, $pos);
+        }
+
+        return $email;
     }
 
     protected function setFlash($action, $value)

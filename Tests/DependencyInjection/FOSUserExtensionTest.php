@@ -31,7 +31,7 @@ class FOSUserExtensionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
+     * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
      */
     public function testUserLoadThrowsExceptionUnlessDatabaseDriverIsValid()
     {
@@ -72,6 +72,30 @@ class FOSUserExtensionTest extends \PHPUnit_Framework_TestCase
         $config = $this->getEmptyConfig();
         unset($config['user_class']);
         $loader->load(array($config), new ContainerBuilder());
+    }
+
+    /**
+     * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
+     */
+    public function testCustomDriverWithoutManager()
+    {
+        $loader = new FOSUserExtension();
+        $config = $this->getEmptyConfig();
+        $config['db_driver'] = 'custom';
+        $loader->load(array($config), new ContainerBuilder());
+    }
+
+    public function testCustomDriver()
+    {
+        $this->configuration = new ContainerBuilder();
+        $loader = new FOSUserExtension();
+        $config = $this->getEmptyConfig();
+        $config['db_driver'] = 'custom';
+        $config['service']['user_manager'] = 'acme.user_manager';
+        $loader->load(array($config), $this->configuration);
+
+        $this->assertNotHasDefinition('fos_user.user_manager.default');
+        $this->assertAlias('acme.user_manager', 'fos_user.user_manager');
     }
 
     public function testDisableRegistration()
@@ -250,31 +274,13 @@ class FOSUserExtensionTest extends \PHPUnit_Framework_TestCase
         $this->assertParameter('AcmeMyBundle:Form:theme.html.twig', 'fos_user.template.theme');
     }
 
-    public function testUserLoadEncoderConfigWithDefaults()
-    {
-        $this->createEmptyConfiguration();
-
-        $this->assertParameter('sha512', 'fos_user.encoder.algorithm');
-        $this->assertParameter(false, 'fos_user.encoder.encode_as_base64');
-        $this->assertParameter(1, 'fos_user.encoder.iterations');
-    }
-
-    public function testUserLoadEncoderConfig()
-    {
-        $this->createFullConfiguration();
-
-        $this->assertParameter('sha1', 'fos_user.encoder.algorithm');
-        $this->assertParameter(true, 'fos_user.encoder.encode_as_base64');
-        $this->assertParameter(3, 'fos_user.encoder.iterations');
-    }
-
     public function testUserLoadUtilServiceWithDefaults()
     {
         $this->createEmptyConfiguration();
 
         $this->assertAlias('fos_user.mailer.default', 'fos_user.mailer');
-        $this->assertAlias('fos_user.util.email_canonicalizer.default', 'fos_user.util.email_canonicalizer');
-        $this->assertAlias('fos_user.util.username_canonicalizer.default', 'fos_user.util.username_canonicalizer');
+        $this->assertAlias('fos_user.util.canonicalizer.default', 'fos_user.util.email_canonicalizer');
+        $this->assertAlias('fos_user.util.canonicalizer.default', 'fos_user.util.username_canonicalizer');
     }
 
     public function testUserLoadUtilService()
@@ -379,10 +385,6 @@ service:
     email_canonicalizer: acme_my.email_canonicalizer
     username_canonicalizer: acme_my.username_canonicalizer
     user_manager: acme_my.user_manager
-encoder:
-    algorithm: sha1
-    encode_as_base64: true
-    iterations: 3
 template:
     engine: php
     theme: AcmeMyBundle:Form:theme.html.twig

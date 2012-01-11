@@ -1,14 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<phpunit bootstrap="./Tests/bootstrap.php" color="true">
-<!--
-    <php>
-        <server name="SYMFONY" value="../../../symfony/src" />
-        <server name="KERNEL_DIR" value="../../../../app" />
-    </php>
--->
+<phpunit bootstrap="./Tests/bootstrap.php" colors="true">
+
     <testsuites>
-        <testsuite name="FOSUserBundle">
+        <testsuite name="FOSUserBundle test suite">
             <directory suffix="Test.php">./Tests</directory>
         </testsuite>
     </testsuites>
@@ -19,6 +14,9 @@
             <exclude>
                 <directory>./Resources</directory>
                 <directory>./Tests</directory>
+                <directory>./vendor</directory>
+                <directory>./Propel/map</directory>
+                <directory>./Propel/om</directory>
             </exclude>
         </whitelist>
     </filter>

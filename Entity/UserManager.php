@@ -28,15 +28,14 @@ class UserManager extends BaseUserManager
      * Constructor.
      *
      * @param EncoderFactoryInterface $encoderFactory
-     * @param string                  $algorithm
      * @param CanonicalizerInterface  $usernameCanonicalizer
      * @param CanonicalizerInterface  $emailCanonicalizer
      * @param EntityManager           $em
      * @param string                  $class
      */
-    public function __construct(EncoderFactoryInterface $encoderFactory, $algorithm, CanonicalizerInterface $usernameCanonicalizer, CanonicalizerInterface $emailCanonicalizer, EntityManager $em, $class)
+    public function __construct(EncoderFactoryInterface $encoderFactory, CanonicalizerInterface $usernameCanonicalizer, CanonicalizerInterface $emailCanonicalizer, EntityManager $em, $class)
     {
-        parent::__construct($encoderFactory, $algorithm, $usernameCanonicalizer, $emailCanonicalizer);
+        parent::__construct($encoderFactory, $usernameCanonicalizer, $emailCanonicalizer);
 
         $this->em = $em;
         $this->repository = $em->getRepository($class);
@@ -90,7 +89,7 @@ class UserManager extends BaseUserManager
      * Updates a user.
      *
      * @param UserInterface $user
-     * @param Boolean $andFlush Whether to flush the changes (default true)
+     * @param Boolean       $andFlush Whether to flush the changes (default true)
      */
     public function updateUser(UserInterface $user, $andFlush = true)
     {
@@ -132,7 +131,7 @@ class UserManager extends BaseUserManager
      * Indicates whether the given user and all compared objects correspond to the same record.
      *
      * @param UserInterface $user
-     * @param array $comparisons
+     * @param array         $comparisons
      * @return Boolean
      */
     protected function anyIsUser($user, array $comparisons)
@@ -150,7 +149,7 @@ class UserManager extends BaseUserManager
      * Gets conflictual users for the given user and constraint.
      *
      * @param UserInterface $value
-     * @param array $fields
+     * @param array         $fields
      * @return array
      */
     protected function findConflictualUsers($value, array $fields)
@@ -162,7 +161,7 @@ class UserManager extends BaseUserManager
      * Gets the criteria used to find conflictual entities.
      *
      * @param UserInterface $value
-     * @param array $constraint
+     * @param array         $fields
      * @return array
      */
     protected function getCriteria($value, array $fields)
