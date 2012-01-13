@@ -71,14 +71,20 @@ class SecurityController extends ContainerAware
 
         $csrfToken = $this->container->get('form.csrf_provider')->generateCsrfToken('authenticate');
 
-        return $this->container->get('templating')->renderResponse('FOSUserBundle:Security:login.html.'.$this->container->getParameter('fos_user.template.engine'), array(
+        $adminPool = $this->container->get('sonata.admin.pool');
+
+        $templateParameters = array(
             'last_username' => $lastUsername,
             'error'         => $error,
             'usingIE6'  => $usingIE6,
             'baseLayout' => $baseLayout,
             'usePageHeader' => $usePageHeader,
             'csrf_token' => $csrfToken,
-        ));
+        );
+        
+        if($adminPool) $templateParameters['admin_pool'] = $adminPool;        
+        
+        return $this->container->get('templating')->renderResponse('FOSUserBundle:Security:login.html.'.$this->container->getParameter('fos_user.template.engine'), $templateParameters);
     }
 
     public function checkAction()

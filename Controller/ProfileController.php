@@ -36,12 +36,18 @@ class ProfileController extends ContainerAware
         if (!is_object($user) || !$user instanceof UserInterface) {
             throw new AccessDeniedException('This user does not have access to this section.');
         }
+        
+        $adminPool = $this->container->get('sonata.admin.pool');
 
-        return $this->container->get('templating')->renderResponse('FOSUserBundle:Profile:show.html.'.$this->container->getParameter('fos_user.template.engine'), array(
+        $templateParameters = array(
             'user' => $user,
             'baseLayout' => $baseLayout,
             'usePageHeader' => $usePageHeader,
-        ));
+        );
+        
+        if($adminPool) $templateParameters['admin_pool'] = $adminPool;
+        
+        return $this->container->get('templating')->renderResponse('FOSUserBundle:Profile:show.html.'.$this->container->getParameter('fos_user.template.engine'), $templateParameters);
     }
 
     /**
@@ -68,14 +74,20 @@ class ProfileController extends ContainerAware
             return new RedirectResponse($this->container->get('router')->generate('fos_user_profile_show'));
         }
 
-        return $this->container->get('templating')->renderResponse(
-            'FOSUserBundle:Profile:edit.html.'.$this->container->getParameter('fos_user.template.engine'),
-            array(
+        $adminPool = $this->container->get('sonata.admin.pool');
+
+        $templateParameters = array(
                 'profileForm' => $form->createView(),
                 'theme' => $this->container->getParameter('fos_user.template.theme'),
                 'baseLayout' => $baseLayout,
                 'usePageHeader' => $usePageHeader,
-            )
+        );
+        
+        if($adminPool) $templateParameters['admin_pool'] = $adminPool;
+        
+        
+        return $this->container->get('templating')->renderResponse(
+            'FOSUserBundle:Profile:edit.html.'.$this->container->getParameter('fos_user.template.engine'), $templateParameters
         );
     }
 

@@ -35,10 +35,17 @@ class ResettingController extends ContainerAware
         $baseLayout = $this->container->get('userSettings')->baseLayout;
         $usePageHeader = $this->container->get('userSettings')->usePageHeader;
 
-        return $this->container->get('templating')->renderResponse('FOSUserBundle:Resetting:request.html.'.$this->getEngine(), array(
+        $adminPool = $this->container->get('sonata.admin.pool');
+
+        $templateParameters = array(
             'baseLayout' => $baseLayout,
             'usePageHeader' => $usePageHeader,
-        ));
+        );
+        
+        if($adminPool) $templateParameters['admin_pool'] = $adminPool;        
+        
+
+        return $this->container->get('templating')->renderResponse('FOSUserBundle:Resetting:request.html.'.$this->getEngine(), $templateParameters);
     }
 
     /**
@@ -123,14 +130,20 @@ class ResettingController extends ContainerAware
 
             return new RedirectResponse($this->container->get('router')->generate('fos_user_security_login'));
         }
+        
+        $adminPool = $this->container->get('sonata.admin.pool');
 
-        return $this->container->get('templating')->renderResponse('FOSUserBundle:Resetting:reset.html.'.$this->getEngine(), array(
+        $templateParameters = array(
             'token' => $token,
             'resetForm' => $form->createView(),
             'theme' => $this->container->getParameter('fos_user.template.theme'),
             'baseLayout' => $baseLayout,
             'usePageHeader' => $usePageHeader,
-        ));
+        );
+        
+        if($adminPool) $templateParameters['admin_pool'] = $adminPool;        
+
+        return $this->container->get('templating')->renderResponse('FOSUserBundle:Resetting:reset.html.'.$this->getEngine(), $templateParameters);
     }
 
     /**

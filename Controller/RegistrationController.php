@@ -38,25 +38,6 @@ class RegistrationController extends ContainerAware
         
         $form = $this->container->get('fos_user.registration.form');
         
-/*        
- *      TODO: set default values if found in session... why doesn't this code work? 
- * 
-        $options = $this->container->get('fos_user.registration.form.type')->getDefaultOptions(array());
-        $userClass = $options['data_class'];        
-        $user = new $userClass();
-        $session = $this->container->get('request')->getSession();
-        
-        if($session->has('userName'))
-        {
-            $user->setName($session->get('userName'));
-            $form->setData($user);
-        }
-        if($session->has('userEmail'))
-        {
-            $user->setEmail($session->get('userEmail'));
-            $form->setData($user);
-        }
-*/        
         $formHandler = $this->container->get('fos_user.registration.form.handler');
         $confirmationEnabled = $this->container->getParameter('fos_user.registration.confirmation.enabled');
         $approvalEnabled = $this->container->getParameter('fos_user.registration.approval.enabled');
@@ -94,13 +75,19 @@ class RegistrationController extends ContainerAware
             return new RedirectResponse($url);
         }
 
-        return $this->container->get('templating')->renderResponse('FOSUserBundle:Registration:register.html.' . $this->getEngine(), array(
+        $adminPool = $this->container->get('sonata.admin.pool');
+
+        $templateParameters = array(
             'registrationForm' => $form->createView(),
             'theme' => $this->container->getParameter('fos_user.template.theme'),
             'baseLayout' => $baseLayout,
             'usePageHeader' => $usePageHeader,
             'whyRegisterTemplate' => $whyRegisterTemplate
-        ));
+        );
+        
+        if($adminPool) $templateParameters['admin_pool'] = $adminPool;
+
+        return $this->container->get('templating')->renderResponse('FOSUserBundle:Registration:register.html.' . $this->getEngine(), $templateParameters);
     }
 
     /**
