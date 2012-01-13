@@ -29,7 +29,6 @@ class SecurityController extends ContainerAware
         else{
           $usingIE6 = false;
         }
-        
       
         $request = $this->container->get('request');
         /* @var $request \Symfony\Component\HttpFoundation\Request */
