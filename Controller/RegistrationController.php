@@ -28,13 +28,12 @@ class RegistrationController extends ContainerAware
 {
     public function registerAction()
     {
-        $baseLayout = $this->container->get('userSettings')->baseLayout;
-        $usePageHeader = $this->container->get('userSettings')->usePageHeader;
-        $flashName = $this->container->get('userSettings')->flashName;
-        $applicationTitle = $this->container->get('userSettings')->applicationTitle;
-        $adminEmail = $this->container->get('userSettings')->adminEmail;
-       
-        $whyRegisterTemplate = $this->container->get('userSettings')->whyRegister;
+        $baseLayout = $this->container->getParameter('fos_user.settings.base_layout');
+        $usePageHeader = $this->container->getParameter('fos_user.settings.use_page_header');
+        $flashName = $this->container->getParameter('fos_user.settings.flash_name');
+        $applicationTitle = $this->container->getParameter('fos_user.settings.application_title');
+        $adminEmail = $this->container->getParameter('fos_user.settings.admin_email');
+        $whyRegisterTemplate = $this->container->getParameter('fos_user.settings.why_register_template');
         
         $form = $this->container->get('fos_user.registration.form');
         
@@ -128,7 +127,7 @@ class RegistrationController extends ContainerAware
         $this->container->get('fos_user.user_manager')->updateUser($user);
         $this->authenticateUser($user);
 
-        $flashName = $this->container->get('userSettings')->flashName;
+        $flashName = $this->container->getParameter('fos_user.settings.flash_name');
 
         $this->setFlash($flashName, 'Your account has been confirmed.  You are now logged in.');
         $url = $this->container->get('router')->generate('home');

@@ -95,6 +95,10 @@ class FOSUserExtension extends Extension
             $this->loadRegistration($config['registration'], $container, $loader, $config['from_email']);
         }
 
+        if (!empty($config['settings'])) {
+            $this->loadSettings($config['settings'], $container, $loader);
+        }
+
         if (!empty($config['change_password'])) {
             $this->loadChangePassword($config['change_password'], $container, $loader);
         }
@@ -142,6 +146,20 @@ class FOSUserExtension extends Extension
         ));
     }
 
+    private function loadSettings(array $config, ContainerBuilder $container, XmlFileLoader $loader)
+    {
+        $container->setParameter('fos_user.settings.application_title', $config['application_title']);
+        $container->setParameter('fos_user.settings.admin_email', $config['admin_email']);
+        $container->setParameter('fos_user.settings.base_layout', $config['base_layout']);
+        $container->setParameter('fos_user.settings.use_page_header', $config['use_page_header']);
+        $container->setParameter('fos_user.settings.why_register_template', $config['why_register_template']);
+        $container->setParameter('fos_user.settings.flash_name', $config['flash_name']);
+
+        $this->remapParameters($config, $container, array(
+            'settings' => 'fos_user.settings.%s',
+        ));
+    }
+    
     private function loadChangePassword(array $config, ContainerBuilder $container, XmlFileLoader $loader)
     {
         $loader->load('change_password.xml');
@@ -202,6 +220,7 @@ class FOSUserExtension extends Extension
         foreach ($map as $name => $paramName) {
             if (array_key_exists($name, $config)) {
                 $container->setParameter($paramName, $config[$name]);
+             //   echo $paramName.': '.$config[$name].'<br/>';
             }
         }
     }
@@ -213,6 +232,7 @@ class FOSUserExtension extends Extension
                 if (!array_key_exists($ns, $config)) {
                     continue;
                 }
+               
                 $namespaceConfig = $config[$ns];
             } else {
                 $namespaceConfig = $config;
@@ -222,6 +242,7 @@ class FOSUserExtension extends Extension
             } else {
                 foreach ($namespaceConfig as $name => $value) {
                     $container->setParameter(sprintf($map, $name), $value);
+//                    echo '<b>'.$map.': '.$name.'-'.$value.'</b><br/>';
                 }
             }
         }

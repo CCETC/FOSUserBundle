@@ -32,8 +32,8 @@ class ResettingController extends ContainerAware
      */
     public function requestAction()
     {
-        $baseLayout = $this->container->get('userSettings')->baseLayout;
-        $usePageHeader = $this->container->get('userSettings')->usePageHeader;
+        $baseLayout = $this->container->getParameter('fos_user.settings.base_layout');
+        $usePageHeader = $this->container->getParameter('fos_user.settings.use_page_header');
 
         $adminPool = $this->container->get('sonata.admin.pool');
 
@@ -54,9 +54,9 @@ class ResettingController extends ContainerAware
     public function sendEmailAction()
     {
         $username = $this->container->get('request')->request->get('username');
-        $flashName = $this->container->get('userSettings')->flashName;
-        $baseLayout = $this->container->get('userSettings')->baseLayout;
-        $usePageHeader = $this->container->get('userSettings')->usePageHeader;
+        $baseLayout = $this->container->getParameter('fos_user.settings.base_layout');
+        $usePageHeader = $this->container->getParameter('fos_user.settings.use_page_header');
+        $flashName = $this->container->getParameter('fos_user.settings.flash_name');
 
         $user = $this->container->get('fos_user.user_manager')->findUserByUsernameOrEmail($username);
 
@@ -70,8 +70,8 @@ class ResettingController extends ContainerAware
         }
 
         $user->generateConfirmationToken();
-        $applicationTitle = $this->container->get('userSettings')->applicationTitle;
-        $adminEmail = $this->container->get('userSettings')->adminEmail;
+        $applicationTitle = $this->container->getParameter('fos_user.settings.application_title');
+        $adminEmail = $this->container->getParameter('fos_user.settings.admin_email');
         
         $this->container->get('session')->set(static::SESSION_EMAIL, $this->getObfuscatedEmail($user));
         $this->container->get('fos_user.mailer')->sendResettingEmailMessage($user, $applicationTitle, $adminEmail);
@@ -106,9 +106,9 @@ class ResettingController extends ContainerAware
      */
     public function resetAction($token)
     {
-        $baseLayout = $this->container->get('userSettings')->baseLayout;
-        $usePageHeader = $this->container->get('userSettings')->usePageHeader;
-        $flashName = $this->container->get('userSettings')->flashName;
+        $baseLayout = $this->container->getParameter('fos_user.settings.base_layout');
+        $usePageHeader = $this->container->getParameter('fos_user.settings.use_page_header');
+        $flashName = $this->container->getParameter('fos_user.settings.flash_name');
         
         $user = $this->container->get('fos_user.user_manager')->findUserByConfirmationToken($token);
 

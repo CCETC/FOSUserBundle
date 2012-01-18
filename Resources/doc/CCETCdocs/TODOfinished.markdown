@@ -1,5 +1,17 @@
 # CCETC/FOSUserBundle - TODOfinished
 
+## 1.1
+- <del>make dist files for files with customizable fields (profile/register forms and templates)
+- <del>improve configuration
+- document 
+	- <del>configuration
+	- <del>dependencies
+		- <del>bootstrap
+	- <del>custom features
+		- <del>dist files
+		- <del>whyRegister
+	- <del>group management features
+
 ## 1.0
 1. Registration
 	- automatic
