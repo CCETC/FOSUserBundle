@@ -10,12 +10,6 @@
                     <div class="alert-message">{{ form_errors(registrationForm) }}</div>
                 {% endif %}
                 <div class="clearfix">
-                    {{ form_label(registrationForm.name) }}
-                    <div class="input">
-                        {{ form_widget(registrationForm.name, { 'attr': {'class': 'span8'} }) }}
-                    </div>
-                </div><!-- /clearfix -->
-                <div class="clearfix">
                     {{ form_label(registrationForm.email) }}
                     <div class="input">
                         {{ form_widget(registrationForm.email, { 'attr': {'class': 'span8'} }) }}
