@@ -1,1 +1,1 @@
-Resources/doc/CCETCdocs/README.markdown
+Resources/doc/README_CCE.markdown
