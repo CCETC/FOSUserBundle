@@ -54,6 +54,9 @@ Example settings configuration for a site that uses SonataAdmin:
 		flash_name: sonata_flash_success
 		why_register_template: ::_whyRegister.html.twig
 
+## Documentation
+All ISSUES, IDEAS, and FEATURES are documented on the [trello board](https://trello.com/board/fosuserbundle/4f8f262a067c6a6d6001392e).
+
 ## Custom Features
 ### Account Approval
 We have added an "approval" option to registration that only lets users log in once an admin has approved them. To enable Account Approval, use the configuration below.
