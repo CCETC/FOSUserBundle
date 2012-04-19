@@ -35,15 +35,15 @@ class ResettingController extends ContainerAware
         $baseLayout = $this->container->getParameter('fos_user.settings.base_layout');
         $usePageHeader = $this->container->getParameter('fos_user.settings.use_page_header');
 
-        $adminPool = $this->container->get('sonata.admin.pool');
-
         $templateParameters = array(
             'baseLayout' => $baseLayout,
             'usePageHeader' => $usePageHeader,
         );
         
-        if($adminPool) $templateParameters['admin_pool'] = $adminPool;        
-        
+        if(class_exists('Sonata\AdminBundle\SonataAdminBundle')) {
+            $adminPool = $this->container->get('sonata.admin.pool');
+            $templateParameters['admin_pool'] = $adminPool;
+        }        
 
         return $this->container->get('templating')->renderResponse('FOSUserBundle:Resetting:request.html.'.$this->getEngine(), $templateParameters);
     }

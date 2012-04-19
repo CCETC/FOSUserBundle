@@ -71,8 +71,6 @@ class SecurityController extends ContainerAware
 
         $csrfToken = $this->container->get('form.csrf_provider')->generateCsrfToken('authenticate');
 
-        $adminPool = $this->container->get('sonata.admin.pool');
-
         $templateParameters = array(
             'last_username' => $lastUsername,
             'error'         => $error,
@@ -82,7 +80,10 @@ class SecurityController extends ContainerAware
             'csrf_token' => $csrfToken,
         );
         
-        if($adminPool) $templateParameters['admin_pool'] = $adminPool;        
+        if(class_exists('Sonata\AdminBundle\SonataAdminBundle')) {
+            $adminPool = $this->container->get('sonata.admin.pool');
+            $templateParameters['admin_pool'] = $adminPool;
+        }
         
         return $this->container->get('templating')->renderResponse('FOSUserBundle:Security:login.html.'.$this->container->getParameter('fos_user.template.engine'), $templateParameters);
     }

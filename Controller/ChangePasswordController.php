@@ -48,8 +48,6 @@ class ChangePasswordController extends ContainerAware
             return new RedirectResponse($this->getRedirectionUrl($user));
         }
 
-        $adminPool = $this->container->get('sonata.admin.pool');
-
         $templateParameters = array(
                 'changePasswordForm' => $form->createView(),
                 'theme' => $this->container->getParameter('fos_user.template.theme'),
@@ -57,8 +55,10 @@ class ChangePasswordController extends ContainerAware
                 'usePageHeader' => $usePageHeader,
         );
         
-        if($adminPool) $templateParameters['admin_pool'] = $adminPool;
-        
+        if(class_exists('Sonata\AdminBundle\SonataAdminBundle')) {
+            $adminPool = $this->container->get('sonata.admin.pool');
+            $templateParameters['admin_pool'] = $adminPool;
+        }        
         
         return $this->container->get('templating')->renderResponse(
             'FOSUserBundle:ChangePassword:changePassword.html.'.$this->container->getParameter('fos_user.template.engine'),
