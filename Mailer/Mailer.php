@@ -34,24 +34,46 @@ class Mailer implements MailerInterface
         $this->parameters = $parameters;
     }
 
-    public function sendConfirmationEmailMessage(UserInterface $user)
+    public function sendConfirmationEmailMessage(UserInterface $user, $applicationTitle)
     {
         $template = $this->parameters['confirmation.template'];
         $url = $this->router->generate('fos_user_registration_confirm', array('token' => $user->getConfirmationToken()), true);
         $rendered = $this->templating->render($template, array(
             'user' => $user,
-            'confirmationUrl' =>  $url
+            'confirmationUrl' =>  $url,
+            'applicationTitle' => $applicationTitle
         ));
         $this->sendEmailMessage($rendered, $this->parameters['from_email']['confirmation'], $user->getEmail());
     }
+    
+    public function sendApprovalNeededEmailMessage($user, $applicationTitle, $adminEmail)
+    {
+        $message = \Swift_Message::newInstance()
+                ->setSubject($applicationTitle.' - Approval needed')
+                ->setFrom($this->parameters['from_email']['approval'])
+                ->setTo($adminEmail)
+                ->setContentType('text/html')
+                ->setBody('<html>
+                      ' . $user . ' has created an account on '.$applicationTitle.'.<br/>
+                      Before this user can access the site, you must approve their account.<br/><br/>
+                      </html>'
+                )
+        ;
+        $this->mailer->send($message);
+        
+    }
 
-    public function sendResettingEmailMessage(UserInterface $user)
+
+
+    public function sendResettingEmailMessage(UserInterface $user, $applicationTitle, $adminEmail)
     {
         $template = $this->parameters['resetting.template'];
         $url = $this->router->generate('fos_user_resetting_reset', array('token' => $user->getConfirmationToken()), true);
         $rendered = $this->templating->render($template, array(
             'user' => $user,
-            'confirmationUrl' => $url
+            'confirmationUrl' => $url,
+            'applicationTitle' => $applicationTitle,
+            'adminEmail' => $adminEmail
         ));
         $this->sendEmailMessage($rendered, $this->parameters['from_email']['resetting'], $user->getEmail());
     }

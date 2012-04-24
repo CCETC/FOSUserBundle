@@ -28,12 +28,27 @@ class ProfileController extends ContainerAware
      */
     public function showAction()
     {
+        $baseLayout = $this->container->getParameter('fos_user.settings.base_layout');
+        $usePageHeader = $this->container->getParameter('fos_user.settings.use_page_header');
+        $flashName = $this->container->getParameter('fos_user.settings.flash_name');
+
         $user = $this->container->get('security.context')->getToken()->getUser();
         if (!is_object($user) || !$user instanceof UserInterface) {
             throw new AccessDeniedException('This user does not have access to this section.');
         }
+        
+        $templateParameters = array(
+            'user' => $user,
+            'baseLayout' => $baseLayout,
+            'usePageHeader' => $usePageHeader,
+        );
 
-        return $this->container->get('templating')->renderResponse('FOSUserBundle:Profile:show.html.'.$this->container->getParameter('fos_user.template.engine'), array('user' => $user));
+        if(class_exists('Sonata\AdminBundle\SonataAdminBundle')) {
+            $adminPool = $this->container->get('sonata.admin.pool');
+            $templateParameters['admin_pool'] = $adminPool;
+        }
+        
+        return $this->container->get('templating')->renderResponse('FOSUserBundle:Profile:show.html.'.$this->container->getParameter('fos_user.template.engine'), $templateParameters);
     }
 
     /**
@@ -41,6 +56,10 @@ class ProfileController extends ContainerAware
      */
     public function editAction()
     {
+        $baseLayout = $this->container->getParameter('fos_user.settings.base_layout');
+        $usePageHeader = $this->container->getParameter('fos_user.settings.use_page_header');
+        $flashName = $this->container->getParameter('fos_user.settings.flash_name');
+
         $user = $this->container->get('security.context')->getToken()->getUser();
         if (!is_object($user) || !$user instanceof UserInterface) {
             throw new AccessDeniedException('This user does not have access to this section.');
@@ -51,14 +70,25 @@ class ProfileController extends ContainerAware
 
         $process = $formHandler->process($user);
         if ($process) {
-            $this->setFlash('fos_user_success', 'profile.flash.updated');
+            $this->setFlash($flashName, 'Your information has been updated.');
 
             return new RedirectResponse($this->container->get('router')->generate('fos_user_profile_show'));
         }
 
+        $templateParameters = array(
+                'profileForm' => $form->createView(),
+                'theme' => $this->container->getParameter('fos_user.template.theme'),
+                'baseLayout' => $baseLayout,
+                'usePageHeader' => $usePageHeader,
+        );
+        
+        if(class_exists('Sonata\AdminBundle\SonataAdminBundle')) {
+            $adminPool = $this->container->get('sonata.admin.pool');
+            $templateParameters['admin_pool'] = $adminPool;
+        }        
+        
         return $this->container->get('templating')->renderResponse(
-            'FOSUserBundle:Profile:edit.html.'.$this->container->getParameter('fos_user.template.engine'),
-            array('form' => $form->createView(), 'theme' => $this->container->getParameter('fos_user.template.theme'))
+            'FOSUserBundle:Profile:edit.html.'.$this->container->getParameter('fos_user.template.engine'), $templateParameters
         );
     }
 

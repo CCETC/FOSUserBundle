@@ -32,7 +32,7 @@ class RegistrationFormHandler
         $this->mailer = $mailer;
     }
 
-    public function process($confirmation = false)
+    public function process($confirmation = false, $approval = false, $applicationTitle, $adminEmail)
     {
         $user = $this->userManager->createUser();
         $this->form->setData($user);
@@ -41,7 +41,7 @@ class RegistrationFormHandler
             $this->form->bindRequest($this->request);
 
             if ($this->form->isValid()) {
-                $this->onSuccess($user, $confirmation);
+                $this->onSuccess($user, $confirmation, $approval, $applicationTitle, $adminEmail);
 
                 return true;
             }
@@ -50,11 +50,14 @@ class RegistrationFormHandler
         return false;
     }
 
-    protected function onSuccess(UserInterface $user, $confirmation)
+    protected function onSuccess(UserInterface $user, $confirmation, $approval, $applicationTitle, $adminEmail)
     {
         if ($confirmation) {
             $user->setEnabled(false);
-            $this->mailer->sendConfirmationEmailMessage($user);
+            $this->mailer->sendConfirmationEmailMessage($user, $applicationTitle);
+        } else if ($approval) {
+            $user->setEnabled(false);
+            $this->mailer->sendApprovalNeededEmailMessage($user, $applicationTitle, $adminEmail);
         } else {
             $user->setConfirmationToken(null);
             $user->setEnabled(true);

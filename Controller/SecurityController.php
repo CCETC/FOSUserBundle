@@ -18,6 +18,17 @@ class SecurityController extends ContainerAware
 {
     public function loginAction()
     {
+        $baseLayout = $this->container->getParameter('fos_user.settings.base_layout');
+        $usePageHeader = $this->container->getParameter('fos_user.settings.use_page_header');
+        
+        $ua = $_SERVER['HTTP_USER_AGENT'];
+	if((!isset($_SESSION['ie6_message']) || $_SESSION['ie6_message'] == true) && preg_match('/\bmsie 6/i', $ua) && !preg_match('/\bopera/i', $ua)) {
+          $usingIE6 = true;
+        }
+        else{
+          $usingIE6 = false;
+        }
+      
         $request = $this->container->get('request');
         /* @var $request \Symfony\Component\HttpFoundation\Request */
         $session = $request->getSession();
@@ -36,17 +47,44 @@ class SecurityController extends ContainerAware
         if ($error) {
             // TODO: this is a potential security risk (see http://trac.symfony-project.org/ticket/9523)
             $error = $error->getMessage();
+            
+            // customize the disable account error message
+            if($error == 'User account is disabled.') {
+                $confirmationEnabled = $this->container->getParameter('fos_user.registration.confirmation.enabled');
+                $approvalEnabled = $this->container->getParameter('fos_user.registration.approval.enabled');        
+
+                if($confirmationEnabled)
+                {
+                    $error = "You must verify your e-mail before logging in.  Please follow the instructions in the e-mail you received when you registered.";
+                }
+                else if($approvalEnabled)
+                {
+                    $error = "Your account must first be approved by an administrator before you can login.";    
+                }
+            }
+                 
+                
         }
         // last username entered by the user
         $lastUsername = (null === $session) ? '' : $session->get(SecurityContext::LAST_USERNAME);
 
         $csrfToken = $this->container->get('form.csrf_provider')->generateCsrfToken('authenticate');
 
-        return $this->container->get('templating')->renderResponse('FOSUserBundle:Security:login.html.'.$this->container->getParameter('fos_user.template.engine'), array(
+        $templateParameters = array(
             'last_username' => $lastUsername,
             'error'         => $error,
+            'usingIE6'  => $usingIE6,
+            'baseLayout' => $baseLayout,
+            'usePageHeader' => $usePageHeader,
             'csrf_token' => $csrfToken,
-        ));
+        );
+        
+        if(class_exists('Sonata\AdminBundle\SonataAdminBundle')) {
+            $adminPool = $this->container->get('sonata.admin.pool');
+            $templateParameters['admin_pool'] = $adminPool;
+        }
+        
+        return $this->container->get('templating')->renderResponse('FOSUserBundle:Security:login.html.'.$this->container->getParameter('fos_user.template.engine'), $templateParameters);
     }
 
     public function checkAction()

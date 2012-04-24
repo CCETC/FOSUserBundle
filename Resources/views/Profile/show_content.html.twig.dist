@@ -1,0 +1,7 @@
+<div class="row">
+    <div class="span6">
+        <p><b>{{ 'profile.show.email'|trans({}, 'FOSUserBundle') }}</b>: {{ user.email }}</p>
+
+        <a class="pull-right btn primary" href="{{ url('fos_user_profile_edit') }}">Edit Information &rarr;</a>
+    </div>
+</div>

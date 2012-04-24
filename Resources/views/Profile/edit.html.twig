@@ -1,5 +1,14 @@
-{% extends "FOSUserBundle::layout.html.twig" %}
+{% extends baseLayout %}
 
-{% block fos_user_content %}
+{% if usePageHeader %}
+    {% block page_header %}
+        Edit Information
+    {% endblock %}
+{% endif %}
+
+{% block content %}
+{% if not usePageHeader %}
+        <h1>Edit Information</h1>
+{% endif %}
 {% include "FOSUserBundle:Profile:edit_content.html.twig" %}
-{% endblock fos_user_content %}
+{% endblock content %}

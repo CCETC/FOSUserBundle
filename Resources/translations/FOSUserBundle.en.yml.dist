@@ -16,7 +16,7 @@ group:
 
 security:
     login:
-        username: "Username:"
+        username: "E-mail:"
         password: "Password:"
         remember_me: Remember me
         submit: Login
@@ -26,16 +26,19 @@ profile:
     show:
         username: Username
         email: Email
+        firstName: First Name
+        lastName: Last Name
+        name: Name
     edit:
         submit: Update
     flash:
-        updated: The profile has been updated
+        updated: Your profile has been updated
 
 # Password change
 change_password:
     submit: Change password
     flash:
-        success: The password has been changed
+        success: Your password has been changed
 
 # Registration
 registration:
@@ -49,6 +52,7 @@ registration:
         subject: Welcome %username%!
         message: |
             Hello %username%!
+            Your account on %applicationTitle% has been created.
 
             To finish activating your account - please visit %confirmationUrl%
 
@@ -60,8 +64,8 @@ resetting:
     password_already_requested: The password for this user has already been requested within the last 24 hours.
     check_email: An email has been sent to %email%. It contains a link you must click to reset your password.
     request:
-        invalid_username: The username or email address "%username%" does not exist.
-        username: "Username or email address:"
+        invalid_username: This email address "%username%" does not exist.
+        username: "Email address:"
         submit: Reset password
     reset:
         submit: Change password
@@ -71,8 +75,11 @@ resetting:
         subject: Reset Password
         message: |
             Hello %username%!
+            You have requested to reset your password for %applicationTitle%.
 
             To reset your password - please visit %confirmationUrl%
+
+            If you did not request to have your password reset, please contact us at %adminEmail%
 
             Regards,
             the Team.
@@ -88,17 +95,23 @@ layout:
 fos_user_group_form_name: "Group name:"
 
 fos_user_profile_form_user_username: "Username:"
-fos_user_profile_form_user_email: "Email:"
-fos_user_profile_form_current: "Current Password:"
+fos_user_profile_form_user_email: "E-mail:"
+fos_user_profile_form_current: "Current Password (for verification):"
+fos_user_profile_form_user_firstName: "First Name:"
+fos_user_profile_form_user_name: "Name:"
+fos_user_profile_form_user_lastName: "Last Name:"
 
+fos_user_registration_form_name: "Name:"
 fos_user_registration_form_username: "Username:"
 fos_user_registration_form_email: "Email:"
 fos_user_registration_form_plainPassword_first: "Password:"
-fos_user_registration_form_plainPassword_second: "Verification:"
+fos_user_registration_form_plainPassword_second: "Verify password:"
+fos_user_registration_form_firstName: "First Name:"
+fos_user_registration_form_lastName: "Last Name:"
 
 fos_user_resetting_form_new_first: "New password:"
-fos_user_resetting_form_new_second: "Verification:"
+fos_user_resetting_form_new_second: "Verify new password:"
 
 fos_user_change_password_form_new_first: "New password:"
-fos_user_change_password_form_new_second: "Verification:"
+fos_user_change_password_form_new_second: "Verify new password:"
 fos_user_change_password_form_current: "Current password:"

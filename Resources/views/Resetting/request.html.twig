@@ -1,5 +1,15 @@
-{% extends "FOSUserBundle::layout.html.twig" %}
+{% extends baseLayout %}
 
-{% block fos_user_content %}
+{% if usePageHeader %}
+    {% block page_header %}
+        Reset Password
+    {% endblock %}
+{% endif %}
+
+{% block content %}
+{% if not usePageHeader %}
+        <h1>Reset Password</h1>
+{% endif %}
+
 {% include "FOSUserBundle:Resetting:request_content.html.twig" %}
-{% endblock fos_user_content %}
+{% endblock content %}

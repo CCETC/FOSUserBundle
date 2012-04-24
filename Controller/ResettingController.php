@@ -33,7 +33,20 @@ class ResettingController extends ContainerAware
      */
     public function requestAction()
     {
-        return $this->container->get('templating')->renderResponse('FOSUserBundle:Resetting:request.html.'.$this->getEngine());
+        $baseLayout = $this->container->getParameter('fos_user.settings.base_layout');
+        $usePageHeader = $this->container->getParameter('fos_user.settings.use_page_header');
+
+        $templateParameters = array(
+            'baseLayout' => $baseLayout,
+            'usePageHeader' => $usePageHeader,
+        );
+        
+        if(class_exists('Sonata\AdminBundle\SonataAdminBundle')) {
+            $adminPool = $this->container->get('sonata.admin.pool');
+            $templateParameters['admin_pool'] = $adminPool;
+        }        
+
+        return $this->container->get('templating')->renderResponse('FOSUserBundle:Resetting:request.html.'.$this->getEngine(), $templateParameters);
     }
 
     /**
@@ -42,24 +55,32 @@ class ResettingController extends ContainerAware
     public function sendEmailAction()
     {
         $username = $this->container->get('request')->request->get('username');
+        $baseLayout = $this->container->getParameter('fos_user.settings.base_layout');
+        $usePageHeader = $this->container->getParameter('fos_user.settings.use_page_header');
+        $flashName = $this->container->getParameter('fos_user.settings.flash_name');
 
         $user = $this->container->get('fos_user.user_manager')->findUserByUsernameOrEmail($username);
 
-        if (null === $user) {
-            return $this->container->get('templating')->renderResponse('FOSUserBundle:Resetting:request.html.'.$this->getEngine(), array('invalid_username' => $username));
+        if (null === $user){
+            return $this->container->get('templating')->renderResponse('FOSUserBundle:Resetting:request.html.'.$this->getEngine(), array('invalid_username' => $username, 'baseLayout' => $baseLayout, 'useBreadcrumb' => $useBreadcrumb));
         }
 
         if ($user->isPasswordRequestNonExpired($this->container->getParameter('fos_user.resetting.token_ttl'))) {
-            return $this->container->get('templating')->renderResponse('FOSUserBundle:Resetting:passwordAlreadyRequested.html.'.$this->getEngine());
+            $this->setFlash($flashName, 'The password for this user has already been requested within the last 24 hours.');
+            return $this->container->get('templating')->renderResponse('FOSUserBundle:Resetting:request.html.'.$this->getEngine(), array('baseLayout' => $baseLayout, 'useBreadcrumb' => $useBreadcrumb));
         }
 
         $user->generateConfirmationToken();
+        $applicationTitle = $this->container->getParameter('fos_user.settings.application_title');
+        $adminEmail = $this->container->getParameter('fos_user.settings.admin_email');
+        
         $this->container->get('session')->set(static::SESSION_EMAIL, $this->getObfuscatedEmail($user));
-        $this->container->get('fos_user.mailer')->sendResettingEmailMessage($user);
+        $this->container->get('fos_user.mailer')->sendResettingEmailMessage($user, $applicationTitle, $adminEmail);
         $user->setPasswordRequestedAt(new \DateTime());
         $this->container->get('fos_user.user_manager')->updateUser($user);
 
-        return new RedirectResponse($this->container->get('router')->generate('fos_user_resetting_check_email'));
+        $this->setFlash($flashName, 'An email has been sent to '.$user->getEmail().'. It contains an link you must click to reset your password.');
+        return new RedirectResponse($this->container->get('router')->generate('fos_user_security_login'));
     }
 
     /**
@@ -86,6 +107,10 @@ class ResettingController extends ContainerAware
      */
     public function resetAction($token)
     {
+        $baseLayout = $this->container->getParameter('fos_user.settings.base_layout');
+        $usePageHeader = $this->container->getParameter('fos_user.settings.use_page_header');
+        $flashName = $this->container->getParameter('fos_user.settings.flash_name');
+        
         $user = $this->container->get('fos_user.user_manager')->findUserByConfirmationToken($token);
 
         if (null === $user) {
@@ -101,18 +126,25 @@ class ResettingController extends ContainerAware
         $process = $formHandler->process($user);
 
         if ($process) {
-            $this->authenticateUser($user);
 
-            $this->setFlash('fos_user_success', 'resetting.flash.success');
+            $this->setFlash($flashName, 'Your password has been reset.');
 
-            return new RedirectResponse($this->getRedirectionUrl($user));
+            return new RedirectResponse($this->container->get('router')->generate('fos_user_security_login'));
         }
+        
+        $adminPool = $this->container->get('sonata.admin.pool');
 
-        return $this->container->get('templating')->renderResponse('FOSUserBundle:Resetting:reset.html.'.$this->getEngine(), array(
+        $templateParameters = array(
             'token' => $token,
-            'form' => $form->createView(),
+            'resetForm' => $form->createView(),
             'theme' => $this->container->getParameter('fos_user.template.theme'),
-        ));
+            'baseLayout' => $baseLayout,
+            'usePageHeader' => $usePageHeader,
+        );
+        
+        if($adminPool) $templateParameters['admin_pool'] = $adminPool;        
+
+        return $this->container->get('templating')->renderResponse('FOSUserBundle:Resetting:reset.html.'.$this->getEngine(), $templateParameters);
     }
 
     /**

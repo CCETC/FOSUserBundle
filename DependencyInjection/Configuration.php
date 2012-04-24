@@ -79,6 +79,7 @@ class Configuration implements ConfigurationInterface
         $this->addProfileSection($rootNode);
         $this->addChangePasswordSection($rootNode);
         $this->addRegistrationSection($rootNode);
+        $this->addSettingsSection($rootNode);
         $this->addResettingSection($rootNode);
         $this->addServiceSection($rootNode);
         $this->addTemplateSection($rootNode);
@@ -134,6 +135,20 @@ class Configuration implements ConfigurationInterface
                                 ->end()
                             ->end()
                         ->end()
+                        ->arrayNode('approval')
+                            ->addDefaultsIfNotSet()
+                            ->children()
+                                ->booleanNode('enabled')->defaultFalse()->end()
+                                ->scalarNode('template')->defaultValue('FOSUserBundle:Registration:email.txt.twig')->end()
+                                ->arrayNode('from_email')
+                                    ->canBeUnset()
+                                    ->children()
+                                        ->scalarNode('address')->isRequired()->cannotBeEmpty()->end()
+                                        ->scalarNode('sender_name')->isRequired()->cannotBeEmpty()->end()
+                                    ->end()
+                                ->end()
+                            ->end()
+                        ->end()
                         ->arrayNode('form')
                             ->addDefaultsIfNotSet()
                             ->children()
@@ -146,6 +161,33 @@ class Configuration implements ConfigurationInterface
                                 ->end()
                             ->end()
                         ->end()
+                    ->end()
+                ->end()
+            ->end();
+    }
+
+    private function addSettingsSection(ArrayNodeDefinition $node)
+    {
+        $node
+            ->children()
+                ->arrayNode('settings')
+                    ->addDefaultsIfNotSet()
+                    ->canBeUnset()
+                    ->children()
+                        ->scalarNode('application_title')
+                            ->cannotBeOverwritten()
+                            ->isRequired()
+                            ->cannotBeEmpty()
+                        ->end()
+                        ->scalarNode('admin_email')->defaultValue('')->end()
+                        ->scalarNode('base_layout')
+                            ->cannotBeOverwritten()
+                            ->isRequired()
+                            ->cannotBeEmpty()
+                        ->end()                            
+                        ->booleanNode('use_page_header')->defaultFalse()->end()
+                        ->scalarNode('flash_name')->defaultValue('fos_user_success')->end()
+                        ->scalarNode('why_register_template')->defaultValue('')->end()
                     ->end()
                 ->end()
             ->end();
