@@ -61,13 +61,25 @@ class ResettingController extends ContainerAware
 
         $user = $this->container->get('fos_user.user_manager')->findUserByUsernameOrEmail($username);
 
+	$templateParameters = array(
+	    'usePageHeader' => $usePageHeader,
+	    'baseLayout' => $baseLayout
+	);
+	
+        if(class_exists('Sonata\AdminBundle\SonataAdminBundle')) {
+            $adminPool = $this->container->get('sonata.admin.pool');
+            $templateParameters['admin_pool'] = $adminPool;
+        }        	
+	
         if (null === $user){
-            return $this->container->get('templating')->renderResponse('FOSUserBundle:Resetting:request.html.'.$this->getEngine(), array('invalid_username' => $username, 'baseLayout' => $baseLayout, 'useBreadcrumb' => $useBreadcrumb));
+ 	    $templateParameters['invalid_username'] = $username;
+	    return $this->container->get('templating')->renderResponse('FOSUserBundle:Resetting:request.html.'.$this->getEngine(), $templateParameters);
         }
 
         if ($user->isPasswordRequestNonExpired($this->container->getParameter('fos_user.resetting.token_ttl'))) {
             $this->setFlash($flashName, 'The password for this user has already been requested within the last 24 hours.');
-            return $this->container->get('templating')->renderResponse('FOSUserBundle:Resetting:request.html.'.$this->getEngine(), array('baseLayout' => $baseLayout, 'useBreadcrumb' => $useBreadcrumb));
+            
+	    return $this->container->get('templating')->renderResponse('FOSUserBundle:Resetting:request.html.'.$this->getEngine(), $templateParameters);
         }
 
         $user->generateConfirmationToken();

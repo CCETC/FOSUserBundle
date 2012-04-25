@@ -10,13 +10,10 @@
 {% if not usePageHeader %}
         <h1>Login</h1>
 {% endif %}
-{% if error %}
-    <div>{{ error|trans({}, 'FOSUserBundle') }}</div>
-{% endif %}
 <div class="row">
     <div class="span10 offset3 form-stacked">
         {% if error %}
-            <div class="alert-message error">{{ error }}</div>
+            <div class="alert-message block-message error">{{ error }}</div>
         {% endif %}
 
         <form action="{{ path("fos_user_security_check") }}" method="post">
