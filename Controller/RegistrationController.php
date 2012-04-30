@@ -29,6 +29,10 @@ class RegistrationController extends ContainerAware
 {
     public function registerAction()
     {
+        if ($this->container->get('security.context')->isGranted('IS_AUTHENTICATED_FULLY')) {
+            return new RedirectResponse($this->container->get('router')->generate('home'));
+        }
+
         $baseLayout = $this->container->getParameter('fos_user.settings.base_layout');
         $usePageHeader = $this->container->getParameter('fos_user.settings.use_page_header');
         $flashName = $this->container->getParameter('fos_user.settings.flash_name');

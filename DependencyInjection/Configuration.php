@@ -139,7 +139,7 @@ class Configuration implements ConfigurationInterface
                             ->addDefaultsIfNotSet()
                             ->children()
                                 ->booleanNode('enabled')->defaultFalse()->end()
-                                ->scalarNode('template')->defaultValue('FOSUserBundle:Registration:email.txt.twig')->end()
+                                ->scalarNode('template')->defaultValue('FOSUserBundle:Registration:approvalEmail.txt.twig')->end()
                                 ->arrayNode('from_email')
                                     ->canBeUnset()
                                     ->children()

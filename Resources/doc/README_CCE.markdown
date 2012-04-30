@@ -54,6 +54,9 @@ Example settings configuration for a site that uses SonataAdmin:
 		flash_name: sonata_flash_success
 		why_register_template: ::_whyRegister.html.twig
 
+### routes
+The bundle assume that you have a ``home`` route, and uses this to redirect from login/register pages when logged in.
+
 ## Documentation
 All ISSUES, IDEAS, and FEATURES are documented on the [trello board](https://trello.com/board/fosuserbundle/4f8f262a067c6a6d6001392e).
 

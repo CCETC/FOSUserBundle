@@ -33,6 +33,10 @@ class ResettingController extends ContainerAware
      */
     public function requestAction()
     {
+        if ($this->container->get('security.context')->isGranted('IS_AUTHENTICATED_FULLY')) {
+            return new RedirectResponse($this->container->get('router')->generate('home'));
+        }
+
         $baseLayout = $this->container->getParameter('fos_user.settings.base_layout');
         $usePageHeader = $this->container->getParameter('fos_user.settings.use_page_header');
 

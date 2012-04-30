@@ -136,6 +136,11 @@ class FOSUserExtension extends Extension
             $fromEmail = $config['confirmation']['from_email'];
             unset($config['confirmation']['from_email']);
         }
+        if (isset($config['approval']['from_email'])) {
+            // overwrite the global one
+            $fromEmail = $config['confirmation']['from_email'];
+            unset($config['confirmation']['from_email']);
+        }
         $container->setParameter('fos_user.registration.confirmation.from_email', array($fromEmail['address'] => $fromEmail['sender_name']));
         $container->setParameter('fos_user.registration.approval.from_email', array($fromEmail['address'] => $fromEmail['sender_name']));
 
@@ -220,13 +225,12 @@ class FOSUserExtension extends Extension
         foreach ($map as $name => $paramName) {
             if (array_key_exists($name, $config)) {
                 $container->setParameter($paramName, $config[$name]);
-             //   echo $paramName.': '.$config[$name].'<br/>';
             }
         }
     }
 
     protected function remapParametersNamespaces(array $config, ContainerBuilder $container, array $namespaces)
-    {
+    {        
         foreach ($namespaces as $ns => $map) {
             if ($ns) {
                 if (!array_key_exists($ns, $config)) {
@@ -242,7 +246,6 @@ class FOSUserExtension extends Extension
             } else {
                 foreach ($namespaceConfig as $name => $value) {
                     $container->setParameter(sprintf($map, $name), $value);
-//                    echo '<b>'.$map.': '.$name.'-'.$value.'</b><br/>';
                 }
             }
         }

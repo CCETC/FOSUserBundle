@@ -1,0 +1,11 @@
+{% block subject %}
+{% autoescape false %}
+{{ 'approval.email.subject'|trans({'%username%': user.username }, 'FOSUserBundle') }}
+{% endautoescape %}
+{% endblock %}
+{% block body_text %}
+{% autoescape false %}
+{{ 'approval.email.message'|trans({'%username%': user.username, '%applicationTitle%': applicationTitle}, 'FOSUserBundle') }}
+{% endautoescape %}
+{% endblock %}
+{% block body_html %}{% endblock %}

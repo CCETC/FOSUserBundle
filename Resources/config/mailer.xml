@@ -16,6 +16,7 @@
             <argument type="service" id="templating" />
             <argument type="collection">
                 <argument key="confirmation.template">%fos_user.registration.confirmation.template%</argument>
+                <argument key="approval.template">%fos_user.registration.approval.template%</argument>
                 <argument key="resetting.template">%fos_user.resetting.email.template%</argument>
                 <argument key="from_email" type="collection">
                     <argument key="confirmation">%fos_user.registration.confirmation.from_email%</argument>

@@ -48,22 +48,13 @@ class Mailer implements MailerInterface
     
     public function sendApprovalNeededEmailMessage($user, $applicationTitle, $adminEmail)
     {
-        $message = \Swift_Message::newInstance()
-                ->setSubject($applicationTitle.' - Approval needed')
-                ->setFrom($this->parameters['from_email']['approval'])
-                ->setTo($adminEmail)
-                ->setContentType('text/html')
-                ->setBody('<html>
-                      ' . $user . ' has created an account on '.$applicationTitle.'.<br/>
-                      Before this user can access the site, you must approve their account.<br/><br/>
-                      </html>'
-                )
-        ;
-        $this->mailer->send($message);
-        
+        $template = $this->parameters['approval.template'];
+        $rendered = $this->templating->render($template, array(
+            'user' => $user,
+            'applicationTitle' => $applicationTitle
+        ));
+        $this->sendEmailMessage($rendered, $this->parameters['from_email']['approval'], $adminEmail);        
     }
-
-
 
     public function sendResettingEmailMessage(UserInterface $user, $applicationTitle, $adminEmail)
     {
