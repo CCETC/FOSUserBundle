@@ -73,8 +73,17 @@ We have added an "approval" option to registration that only lets users log in o
 When a user creates an account, they will be told that they will be able to login once an Admin approves their account.  The email address specified in ``fos_user.settings.admin_email`` will recieve an e-mail notifying them of the new account.
 
 ## Areas for improvement / "broken windows"
-### Group Management
-The group management features of the original bundle have not been touched but are likely not functional with our fork of this bundle.  This bundle is meant to be used with our fork of SonataUserBundle, which handles group management.
+### Unused files/features
+Some features and files, like the templates for displaying messages to the user, have been replaced by our own features.  These features have not been touched but are unused by our bundle, and not guaranteed to work.  This applies to
+
+- group management features (this bundle should be used with SonataUserBundle which handles those features)
+- templates for users messages (Registration:confirmed and Registration:checkEmail)
 
 ### Base Layout
 This bundle should not require that the templates extend an external template.  The bundle should come with a basic base template to be used by default.
+
+### SonataAdmin dependencies
+This bundle is used alongside the SonataAdmin bundle.  We've tried to eliminate all dependencies, but the bundle has not been tested without SonataAdmin.
+
+### dist files
+As documented above, several files exist as .dist files so that they can be customized without interferring with the repo.  Because of this, upstream changes from FOS to these files are not merged with our fork.  These files are basic files (forms, and templates) so there should never be considerable changes to manaully merge.

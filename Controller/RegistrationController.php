@@ -79,8 +79,6 @@ class RegistrationController extends ContainerAware
             return new RedirectResponse($url);
         }
 
-        $adminPool = $this->container->get('sonata.admin.pool');
-
         $templateParameters = array(
             'registrationForm' => $form->createView(),
             'theme' => $this->container->getParameter('fos_user.template.theme'),
@@ -88,8 +86,11 @@ class RegistrationController extends ContainerAware
             'usePageHeader' => $usePageHeader,
             'whyRegisterTemplate' => $whyRegisterTemplate
         );
-        
-        if($adminPool) $templateParameters['admin_pool'] = $adminPool;
+
+        if(class_exists('Sonata\AdminBundle\SonataAdminBundle')) {
+            $adminPool = $this->container->get('sonata.admin.pool');
+            $templateParameters['admin_pool'] = $adminPool;
+        }        
 
         return $this->container->get('templating')->renderResponse('FOSUserBundle:Registration:register.html.' . $this->getEngine(), $templateParameters);
     }

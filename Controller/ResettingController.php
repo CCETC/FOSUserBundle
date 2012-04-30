@@ -147,8 +147,6 @@ class ResettingController extends ContainerAware
 
             return new RedirectResponse($this->container->get('router')->generate('fos_user_security_login'));
         }
-        
-        $adminPool = $this->container->get('sonata.admin.pool');
 
         $templateParameters = array(
             'token' => $token,
@@ -157,8 +155,11 @@ class ResettingController extends ContainerAware
             'baseLayout' => $baseLayout,
             'usePageHeader' => $usePageHeader,
         );
-        
-        if($adminPool) $templateParameters['admin_pool'] = $adminPool;        
+
+        if(class_exists('Sonata\AdminBundle\SonataAdminBundle')) {
+            $adminPool = $this->container->get('sonata.admin.pool');
+            $templateParameters['admin_pool'] = $adminPool;
+        }        
 
         return $this->container->get('templating')->renderResponse('FOSUserBundle:Resetting:reset.html.'.$this->getEngine(), $templateParameters);
     }
