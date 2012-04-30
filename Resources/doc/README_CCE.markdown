@@ -79,9 +79,6 @@ Some features and files, like the templates for displaying messages to the user,
 - group management features (this bundle should be used with SonataUserBundle which handles those features)
 - templates for users messages (Registration:confirmed and Registration:checkEmail)
 
-### Base Layout
-This bundle should not require that the templates extend an external template.  The bundle should come with a basic base template to be used by default.
-
 ### SonataAdmin dependencies
 This bundle is used alongside the SonataAdmin bundle.  We've tried to eliminate all dependencies, but the bundle has not been tested without SonataAdmin.
 
