@@ -2,13 +2,13 @@
 
 {% if usePageHeader %}
     {% block page_header %}
-        Information
+        <i class="icon-vcard"></i> Profile
     {% endblock %}
 {% endif %}
 
 {% block content %}
 {% if not usePageHeader %}
-        <h1>Information</h1>
+        <h1><i class="icon-vcard"></i> Profile</h1>
 {% endif %}
 {% include "FOSUserBundle:Profile:show_content.html.twig" %}
 {% endblock content %}

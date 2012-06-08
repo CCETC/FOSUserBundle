@@ -2,13 +2,13 @@
 
 {% if usePageHeader %}
     {% block page_header %}
-        Edit Information
+        <i class="icon-vcard"></i> Edit Profile
     {% endblock %}
 {% endif %}
 
 {% block content %}
 {% if not usePageHeader %}
-        <h1>Edit Information</h1>
+        <h1><i class="icon-vcard"></i> Edit Profile</h1>
 {% endif %}
 {% include "FOSUserBundle:Profile:edit_content.html.twig" %}
 {% endblock content %}
