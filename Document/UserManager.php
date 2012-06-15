@@ -77,7 +77,7 @@ class UserManager extends BaseUserManager
     {
         return $this->repository->findAll();
     }
-
+    
     /**
      * {@inheritDoc}
      */
