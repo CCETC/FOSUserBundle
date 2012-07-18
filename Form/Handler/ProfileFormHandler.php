@@ -33,14 +33,15 @@ class ProfileFormHandler
 
     public function process(UserInterface $user)
     {
-        $this->form->setData(new CheckPassword($user));
+        $this->form->setData($user);
 
         if ('POST' === $this->request->getMethod()) {
             $this->form->bindRequest($this->request);
 
             if ($this->form->isValid()) {
+                if(method_exists($user, 'uploadPhoto')) $user->uploadPhoto();
                 $this->onSuccess($user);
-
+                
                 return true;
             }
 

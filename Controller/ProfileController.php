@@ -80,6 +80,7 @@ class ProfileController extends ContainerAware
                 'theme' => $this->container->getParameter('fos_user.template.theme'),
                 'baseLayout' => $baseLayout,
                 'usePageHeader' => $usePageHeader,
+                'user' => $user
         );
         
         if(class_exists('Sonata\AdminBundle\SonataAdminBundle')) {

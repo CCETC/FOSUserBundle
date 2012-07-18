@@ -100,6 +100,13 @@ fos_user_profile_form_current: "Current Password (for verification):"
 fos_user_profile_form_user_firstName: "First Name:"
 fos_user_profile_form_user_name: "Name:"
 fos_user_profile_form_user_lastName: "Last Name:"
+fos_user_profile_form_username: "Username:"
+fos_user_profile_form_email: "E-mail:"
+fos_user_profile_form_current: "Current Password (for verification):"
+fos_user_profile_form_firstName: "First Name:"
+fos_user_profile_form_name: "Name:"
+fos_user_profile_form_lastName: "Last Name:"
+
 
 fos_user_registration_form_name: "Name:"
 fos_user_registration_form_username: "Username:"

@@ -8,15 +8,9 @@
                 <div class="alert-message">{{ form_errors(profileForm) }}</div>
             {% endif %}
                 <div class="clearfix">
-                    {{ form_label(profileForm.user.email) }}
+                    {{ form_label(profileForm.email) }}
                     <div class="input">
-                        {{ form_widget(profileForm.user.email, { 'attr': {'class': 'span8'} }) }}
-                    </div>
-                </div><!-- /clearfix -->
-                <div class="clearfix">
-                    {{ form_label(profileForm.current) }}
-                    <div class="input">
-                        {{ form_widget(profileForm.current, { 'attr': {'class': 'span8'} }) }}
+                        {{ form_widget(profileForm.email, { 'attr': {'class': 'span8'} }) }}
                     </div>
                 </div><!-- /clearfix -->
                 
