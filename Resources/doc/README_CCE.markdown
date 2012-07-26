@@ -33,6 +33,12 @@ For each you can simply copy the file and run as is, or copy and add your custom
 
 	cp Form/Type/ProfileFormType.php.dist Form/Type/ProfileFormType.php
 
+To keep your customizations under version control, cp the files to your project and create symbolic links.
+
+        cp Form/Type/ProfileFormType.php.dist /MyApp/app/Application/FOS/UserBundle/Form/Type/ProfileFormType.php
+        ln -s /MyApp/app/Application/FOS/UserBundle/Form/Type/ProfileFormType.php ProfileFormType.php
+
+
 ### configuration
 We have added some settings to the configuration.  *NOTE:* the bundle requires that you defined both an ``application_title`` and a ``base_layout``.
 
