@@ -28,9 +28,9 @@ class ProfileController extends ContainerAware
      */
     public function showAction()
     {
-        $baseLayout = $this->container->getParameter('fos_user.settings.base_layout');
-        $usePageHeader = $this->container->getParameter('fos_user.settings.use_page_header');
-        $flashName = $this->container->getParameter('fos_user.settings.flash_name');
+        $baseLayout = $this->container->getParameter('fos_user.options.base_layout');
+        $usePageHeader = $this->container->getParameter('fos_user.options.use_page_header');
+        $flashName = $this->container->getParameter('fos_user.options.flash_name');
 
         $user = $this->container->get('security.context')->getToken()->getUser();
         if (!is_object($user) || !$user instanceof UserInterface) {
@@ -56,9 +56,9 @@ class ProfileController extends ContainerAware
      */
     public function editAction()
     {
-        $baseLayout = $this->container->getParameter('fos_user.settings.base_layout');
-        $usePageHeader = $this->container->getParameter('fos_user.settings.use_page_header');
-        $flashName = $this->container->getParameter('fos_user.settings.flash_name');
+        $baseLayout = $this->container->getParameter('fos_user.options.base_layout');
+        $usePageHeader = $this->container->getParameter('fos_user.options.use_page_header');
+        $flashName = $this->container->getParameter('fos_user.options.flash_name');
 
         $user = $this->container->get('security.context')->getToken()->getUser();
         if (!is_object($user) || !$user instanceof UserInterface) {

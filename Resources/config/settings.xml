@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+
+        <service id="fos_user.settings.form" factory-method="createNamed" factory-service="form.factory" class="Symfony\Component\Form\Form">
+            <argument>%fos_user.settings.form.type%</argument>
+            <argument>%fos_user.settings.form.name%</argument>
+        </service>
+
+        <service id="fos_user.settings.form.type" class="FOS\UserBundle\Form\Type\SettingsFormType">
+            <tag name="form.type" alias="fos_user_settings" />
+            <argument type="service" id="service_container" />
+        </service>
+
+        <service id="fos_user.settings.form.handler.default" class="FOS\UserBundle\Form\Handler\SettingsFormHandler" scope="request">
+            <argument type="service" id="fos_user.settings.form" />
+            <argument type="service" id="request" />
+            <argument type="service" id="fos_user.user_manager" />
+        </service>
+
+    </services>
+
+</container>

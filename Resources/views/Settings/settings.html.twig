@@ -1,0 +1,47 @@
+{% extends base_template %}
+
+{% block breadcrumb %}
+    <li><i class="icon-cog"></i> Settings</li>    
+{% endblock %}
+
+{% block page_header %}
+    <i class="icon-cog"></i> Settings
+{% endblock %}
+
+{% block content %}
+
+{% include 'FOSUserBundle:Settings:_settingsMenu.html.twig' with {'route' : app.request.get('_route')} %}
+
+<div class="row" id="settings">
+    <div class="span10 form-stacked">
+
+        <form action="{{ path('fos_user_settings') }}" {{ form_enctype(settingsForm) }} method="POST">
+        {% if form_errors(settingsForm) %}
+            <div class="alert-message">{{ form_errors(settingsForm) }}</div>
+        {% endif %}
+        <div class="clearfix">
+            {{ form_label(settingsForm.notificationEmailFrequency) }}
+            <div class="input">
+                {{ form_widget(settingsForm.notificationEmailFrequency, { 'attr': {'class': 'span8'} }) }}
+            </div>
+        </div><!-- /clearfix -->
+
+            {% if settingsForm.primaryCounty is defined %}
+                <div class="clearfix">
+                    {{ form_label(settingsForm.primaryCounty) }}
+                    <div class="input">
+                        {{ form_widget(settingsForm.primaryCounty, { 'attr': {'class': 'span8'} }) }}
+                    </div>
+                </div><!-- /clearfix -->
+            {% endif %}
+            
+            {{ form_rest(settingsForm) }}
+            <div class="actions">
+                <input class="btn primary large" type="submit" value="Save" />
+                <a href="{{ url('home') }}" class="btn large">Cancel</a>
+            </div>
+        </form>
+    </div>
+
+</div>
+{% endblock %}

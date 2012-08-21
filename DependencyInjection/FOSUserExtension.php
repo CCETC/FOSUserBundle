@@ -95,12 +95,16 @@ class FOSUserExtension extends Extension
             $this->loadRegistration($config['registration'], $container, $loader, $config['from_email']);
         }
 
-        if (!empty($config['settings'])) {
-            $this->loadSettings($config['settings'], $container, $loader);
+        if (!empty($config['options'])) {
+            $this->loadOptions($config['options'], $container, $loader);
         }
 
         if (!empty($config['change_password'])) {
             $this->loadChangePassword($config['change_password'], $container, $loader);
+        }
+
+        if (!empty($config['settings'])) {
+            $this->loadSettings($config['settings'], $container, $loader);
         }
 
         if (!empty($config['resetting'])) {
@@ -151,17 +155,17 @@ class FOSUserExtension extends Extension
         ));
     }
 
-    private function loadSettings(array $config, ContainerBuilder $container, XmlFileLoader $loader)
+    private function loadOptions(array $config, ContainerBuilder $container, XmlFileLoader $loader)
     {
-        $container->setParameter('fos_user.settings.application_title', $config['application_title']);
-        $container->setParameter('fos_user.settings.admin_email', $config['admin_email']);
-        $container->setParameter('fos_user.settings.base_layout', $config['base_layout']);
-        $container->setParameter('fos_user.settings.use_page_header', $config['use_page_header']);
-        $container->setParameter('fos_user.settings.why_register_template', $config['why_register_template']);
-        $container->setParameter('fos_user.settings.flash_name', $config['flash_name']);
+        $container->setParameter('fos_user.options.application_title', $config['application_title']);
+        $container->setParameter('fos_user.options.admin_email', $config['admin_email']);
+        $container->setParameter('fos_user.options.base_layout', $config['base_layout']);
+        $container->setParameter('fos_user.options.use_page_header', $config['use_page_header']);
+        $container->setParameter('fos_user.options.why_register_template', $config['why_register_template']);
+        $container->setParameter('fos_user.options.flash_name', $config['flash_name']);
 
         $this->remapParameters($config, $container, array(
-            'settings' => 'fos_user.settings.%s',
+            'options' => 'fos_user.options.%s',
         ));
     }
     
@@ -174,6 +178,18 @@ class FOSUserExtension extends Extension
 
         $this->remapParametersNamespaces($config, $container, array(
             'form' => 'fos_user.change_password.form.%s',
+        ));
+    }
+    
+    private function loadSettings(array $config, ContainerBuilder $container, XmlFileLoader $loader)
+    {
+        $loader->load('settings.xml');
+
+        $container->setAlias('fos_user.settings.form.handler', $config['form']['handler']);
+        unset($config['form']['handler']);
+
+        $this->remapParametersNamespaces($config, $container, array(
+            'form' => 'fos_user.settings.form.%s',
         ));
     }
 

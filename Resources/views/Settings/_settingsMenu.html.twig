@@ -1,0 +1,8 @@
+<div class="row">
+    <div class="span16">
+        <ul class="tabs">
+            <li class="{{ route == "fos_user_settings" ? 'active' : '' }}"><a href="{{ url('fos_user_settings') }}"><i class="icon-cog-alt"></i> Account Settings</a></li>
+            <li class="{{ route == "fos_user_change_password" ? 'active' : '' }}"><a href="{{ url('fos_user_change_password') }}"><i class="icon-lock"></i> Password</a></li>
+        </ul>
+    </div>
+</div>

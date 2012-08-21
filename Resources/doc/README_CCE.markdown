@@ -13,7 +13,7 @@ Our customizations are listed below.  Some are documented in more detail below u
 - files with specific user entity fields (profile, register, etc) are now included with .dist versions to allow for easy customization
 - minor lanuage and interface customizations
 - a template can be configured to be included with the registration form, which is useful for displaying a friendly message to explain why users may want to create an account
-
+- user settings page
 
 ## Dependencies
 The templates use [Twitter's Bootstrap](http://twitter.github.com/bootstrap/) css library (the js libraries are not used).  FOSUserBundle's templates must extend an external template (see below) so the template they extend should include bootstrap.
@@ -40,7 +40,7 @@ To keep your customizations under version control, cp the files to your project 
 
 
 ### configuration
-We have added some settings to the configuration.  *NOTE:* the bundle requires that you defined both an ``application_title`` and a ``base_layout``.
+We have added some options to the configuration.  *NOTE:* the bundle requires that you defined both an ``application_title`` and a ``base_layout``.
 
 - ``application_title`` - name of application (required)
 - ``admin_email`` - email address to send new account notices to if account approval is enabled (default: empty)
@@ -49,10 +49,10 @@ We have added some settings to the configuration.  *NOTE:* the bundle requires t
 - ``flash_name - the name of the flash to use for user messages (default: fos_user_success)
 - ``why_register_template`` - a template to include with the register template (default: empty)
 
-Example settings configuration for a site that uses SonataAdmin:
+Example options configuration for a site that uses SonataAdmin:
 
 	fos_user:
-	  settings:
+	  options:
 		application_title: My Application
 		admin_email: myemail@gmail.com
 		base_layout: SonataAdminBundle::standard_layout.html.twig

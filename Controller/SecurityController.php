@@ -23,8 +23,8 @@ class SecurityController extends ContainerAware
             return new RedirectResponse($this->container->get('router')->generate('home'));
         }
         
-        $baseLayout = $this->container->getParameter('fos_user.settings.base_layout');
-        $usePageHeader = $this->container->getParameter('fos_user.settings.use_page_header');
+        $baseLayout = $this->container->getParameter('fos_user.options.base_layout');
+        $usePageHeader = $this->container->getParameter('fos_user.options.use_page_header');
         
         $ua = $_SERVER['HTTP_USER_AGENT'];
 	if((!isset($_SESSION['ie6_message']) || $_SESSION['ie6_message'] == true) && preg_match('/\bmsie 6/i', $ua) && !preg_match('/\bopera/i', $ua)) {

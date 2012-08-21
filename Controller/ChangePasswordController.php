@@ -29,9 +29,9 @@ class ChangePasswordController extends ContainerAware
      */
     public function changePasswordAction()
     {
-        $baseLayout = $this->container->getParameter('fos_user.settings.base_layout');
-        $usePageHeader = $this->container->getParameter('fos_user.settings.use_page_header');
-        $flashName = $this->container->getParameter('fos_user.settings.flash_name');
+        $baseLayout = $this->container->getParameter('fos_user.options.base_layout');
+        $usePageHeader = $this->container->getParameter('fos_user.options.use_page_header');
+        $flashName = $this->container->getParameter('fos_user.options.flash_name');
         
         $user = $this->container->get('security.context')->getToken()->getUser();
         if (!is_object($user) || !$user instanceof UserInterface) {
@@ -53,6 +53,7 @@ class ChangePasswordController extends ContainerAware
                 'theme' => $this->container->getParameter('fos_user.template.theme'),
                 'baseLayout' => $baseLayout,
                 'usePageHeader' => $usePageHeader,
+                'noPageHeaderBorder' => true
         );
         
         if(class_exists('Sonata\AdminBundle\SonataAdminBundle')) {

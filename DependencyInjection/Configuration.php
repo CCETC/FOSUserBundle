@@ -78,8 +78,9 @@ class Configuration implements ConfigurationInterface
 
         $this->addProfileSection($rootNode);
         $this->addChangePasswordSection($rootNode);
-        $this->addRegistrationSection($rootNode);
         $this->addSettingsSection($rootNode);
+        $this->addRegistrationSection($rootNode);
+        $this->addOptionsSection($rootNode);
         $this->addResettingSection($rootNode);
         $this->addServiceSection($rootNode);
         $this->addTemplateSection($rootNode);
@@ -166,11 +167,11 @@ class Configuration implements ConfigurationInterface
             ->end();
     }
 
-    private function addSettingsSection(ArrayNodeDefinition $node)
+    private function addOptionsSection(ArrayNodeDefinition $node)
     {
         $node
             ->children()
-                ->arrayNode('settings')
+                ->arrayNode('options')
                     ->addDefaultsIfNotSet()
                     ->canBeUnset()
                     ->children()
@@ -246,6 +247,27 @@ class Configuration implements ConfigurationInterface
                                     ->prototype('scalar')->end()
                                     ->defaultValue(array('ChangePassword', 'Default'))
                                 ->end()
+                            ->end()
+                        ->end()
+                    ->end()
+                ->end()
+            ->end();
+    }
+    
+    private function addSettingsSection(ArrayNodeDefinition $node)
+    {
+        $node
+            ->children()
+                ->arrayNode('settings')
+                    ->addDefaultsIfNotSet()
+                    ->canBeUnset()
+                    ->children()
+                        ->arrayNode('form')
+                            ->addDefaultsIfNotSet()
+                            ->children()
+                                ->scalarNode('type')->defaultValue('fos_user_settings')->end()
+                                ->scalarNode('handler')->defaultValue('fos_user.settings.form.handler.default')->end()
+                                ->scalarNode('name')->defaultValue('fos_user_settings_form')->cannotBeEmpty()->end()
                             ->end()
                         ->end()
                     ->end()

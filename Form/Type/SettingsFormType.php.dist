@@ -1,0 +1,60 @@
+<?php
+
+/*
+ * This file is part of the FOSUserBundle package.
+ *
+ * (c) FriendsOfSymfony <http://friendsofsymfony.github.com/>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+namespace FOS\UserBundle\Form\Type;
+
+use Symfony\Component\Form\FormBuilder;
+use Symfony\Component\Form\AbstractType;
+
+class SettingsFormType extends AbstractType
+{
+    protected $container;
+
+    public function __construct($container)
+    {
+        $this->container = $container;
+    }
+    
+    public function buildForm(FormBuilder $builder, array $options)
+    {
+        $builder->add('notificationEmailFrequency', 'choice', array('label' => 'Receive Notification E-mails', 'choices' => array('hourly' => 'hourly', 'daily' => 'daily', 'instantly' => 'instantly', 'never' => 'never')));
+        
+        $user = $this->container->get('security.context')->getToken()->getUser();        
+        $countyRepository = $this->container->get('doctrine')->getRepository('MyCCEAppBundle:County');
+        
+        if(count($user->getCounties()) > 1) {
+            $userCountyQueryBuilder = $countyRepository->createQueryBuilder('c')
+                        ->join('c.users', 'u')
+                        ->where('u.id = '.$user->getId())
+                        ->orderBy('c.name', 'ASC');
+                    
+            
+            $builder->add('primaryCounty', 'entity', array(
+                'label' => 'Primary County',
+                'required' => false,
+                'class' => 'MyCCEAppBundle:County',
+                'query_builder' => $userCountyQueryBuilder
+            ));
+        }
+
+    }
+
+    public function getDefaultOptions(array $options)
+    {
+        return array(
+        );
+    }
+
+    public function getName()
+    {
+        return 'fos_user_settings';
+    }
+}

@@ -4,6 +4,7 @@ nbproject
 catalog.xml
 Form/Type/ProfileFormType.php
 Form/Type/RegistrationFormType.php
+Form/Type/SettingsFormType.php
 Resources/translations/FOSUserBundle.en.yml
 Resources/views/Profile/edit_content.html.twig
 Resources/views/Profile/show_content.html.twig

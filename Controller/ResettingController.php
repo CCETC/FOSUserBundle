@@ -37,8 +37,8 @@ class ResettingController extends ContainerAware
             return new RedirectResponse($this->container->get('router')->generate('home'));
         }
 
-        $baseLayout = $this->container->getParameter('fos_user.settings.base_layout');
-        $usePageHeader = $this->container->getParameter('fos_user.settings.use_page_header');
+        $baseLayout = $this->container->getParameter('fos_user.options.base_layout');
+        $usePageHeader = $this->container->getParameter('fos_user.options.use_page_header');
 
         $templateParameters = array(
             'baseLayout' => $baseLayout,
@@ -59,9 +59,9 @@ class ResettingController extends ContainerAware
     public function sendEmailAction()
     {
         $username = $this->container->get('request')->request->get('username');
-        $baseLayout = $this->container->getParameter('fos_user.settings.base_layout');
-        $usePageHeader = $this->container->getParameter('fos_user.settings.use_page_header');
-        $flashName = $this->container->getParameter('fos_user.settings.flash_name');
+        $baseLayout = $this->container->getParameter('fos_user.options.base_layout');
+        $usePageHeader = $this->container->getParameter('fos_user.options.use_page_header');
+        $flashName = $this->container->getParameter('fos_user.options.flash_name');
 
         $user = $this->container->get('fos_user.user_manager')->findUserByUsernameOrEmail($username);
 
@@ -87,8 +87,8 @@ class ResettingController extends ContainerAware
         }
 
         $user->generateConfirmationToken();
-        $applicationTitle = $this->container->getParameter('fos_user.settings.application_title');
-        $adminEmail = $this->container->getParameter('fos_user.settings.admin_email');
+        $applicationTitle = $this->container->getParameter('fos_user.options.application_title');
+        $adminEmail = $this->container->getParameter('fos_user.options.admin_email');
         
         $this->container->get('session')->set(static::SESSION_EMAIL, $this->getObfuscatedEmail($user));
         $this->container->get('fos_user.mailer')->sendResettingEmailMessage($user, $applicationTitle, $adminEmail);
@@ -123,9 +123,9 @@ class ResettingController extends ContainerAware
      */
     public function resetAction($token)
     {
-        $baseLayout = $this->container->getParameter('fos_user.settings.base_layout');
-        $usePageHeader = $this->container->getParameter('fos_user.settings.use_page_header');
-        $flashName = $this->container->getParameter('fos_user.settings.flash_name');
+        $baseLayout = $this->container->getParameter('fos_user.options.base_layout');
+        $usePageHeader = $this->container->getParameter('fos_user.options.use_page_header');
+        $flashName = $this->container->getParameter('fos_user.options.flash_name');
         
         $user = $this->container->get('fos_user.user_manager')->findUserByConfirmationToken($token);
 
