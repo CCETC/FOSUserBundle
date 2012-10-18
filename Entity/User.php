@@ -15,9 +15,4 @@ use FOS\UserBundle\Model\User as AbstractUser;
 
 abstract class User extends AbstractUser
 {
-    public function setEmail($email)
-    {
-         parent::setEmail($email);
-         $this->setUsername($email);
-    } 
 }
