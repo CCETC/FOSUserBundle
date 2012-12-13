@@ -161,6 +161,7 @@ class FOSUserExtension extends Extension
         $container->setParameter('fos_user.options.admin_email', $config['admin_email']);
         $container->setParameter('fos_user.options.base_layout', $config['base_layout']);
         $container->setParameter('fos_user.options.use_page_header', $config['use_page_header']);
+        $container->setParameter('fos_user.options.manage_passwords', $config['manage_passwords']);
         $container->setParameter('fos_user.options.why_register_template', $config['why_register_template']);
         $container->setParameter('fos_user.options.flash_name', $config['flash_name']);
 

@@ -14,6 +14,7 @@ namespace FOS\UserBundle\Controller;
 use Symfony\Component\DependencyInjection\ContainerAware;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Symfony\Component\Config\Definition\Exception\Exception;
 use FOS\UserBundle\Model\UserInterface;
 
 /**
@@ -29,6 +30,12 @@ class ChangePasswordController extends ContainerAware
      */
     public function changePasswordAction()
     {
+        $managePasswords = $this->container->getParameter('fos_user.options.manage_passwords');        
+
+        if(!$managePasswords) {
+            throw new Exception('You cannot change your password, passwords are managed elsewhere.');            
+        }
+        
         $baseLayout = $this->container->getParameter('fos_user.options.base_layout');
         $usePageHeader = $this->container->getParameter('fos_user.options.use_page_header');
         $flashName = $this->container->getParameter('fos_user.options.flash_name');

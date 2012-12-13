@@ -18,6 +18,8 @@ class SettingsController extends Controller
 
         $form = $this->container->get('fos_user.settings.form');
         $formHandler = $this->container->get('fos_user.settings.form.handler');        
+
+        $managePasswords = $this->container->getParameter('fos_user.options.manage_passwords');        
         
         $process = $formHandler->process($user);
         if ($process) {
@@ -29,7 +31,8 @@ class SettingsController extends Controller
                     'base_template' => $this->container->get('sonata.admin.pool')->getTemplate('layout'),
                     'admin_pool' => $this->container->get('sonata.admin.pool'),
                     'settingsForm' => $form->createView(),
-                    'noPageHeaderBorder' => true
+                    'noPageHeaderBorder' => $managePasswords,
+                    'includeMenu' => $managePasswords
                 ));
     }
 }

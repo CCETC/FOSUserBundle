@@ -183,6 +183,7 @@ class Configuration implements ConfigurationInterface
                         ->scalarNode('admin_email')->defaultValue('')->end()
                         ->scalarNode('base_layout')->defaultValue('FOSUserBundle::layout.html.twig')->end()                           
                         ->booleanNode('use_page_header')->defaultFalse()->end()
+                        ->booleanNode('manage_passwords')->defaultTrue()->end()
                         ->scalarNode('flash_name')->defaultValue('fos_user_success')->end()
                         ->scalarNode('why_register_template')->defaultValue('')->end()
                     ->end()

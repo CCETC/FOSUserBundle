@@ -10,10 +10,12 @@
 
 {% block content %}
 
-{% include 'FOSUserBundle:Settings:_settingsMenu.html.twig' with {'route' : app.request.get('_route')} %}
+{% if includeMenu is not defined or includeMenu %}
+    {% include 'FOSUserBundle:Settings:_settingsMenu.html.twig' with {'route' : app.request.get('_route')} %}
+{% endif %}
 
 <div class="row" id="settings">
-    <div class="span10 form-stacked">
+    <div class="span16 form-stacked">
 
         <form action="{{ path('fos_user_settings') }}" {{ form_enctype(settingsForm) }} method="POST">
         {% if form_errors(settingsForm) %}
