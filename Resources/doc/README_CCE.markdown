@@ -1,5 +1,7 @@
 # CCETC/FOSUserBundle - README
 
+**NOTE: this bundle is not actively tested or maintained**
+
 This bundle is a forked version of the [FOSUserBundle](https://github.com/FriendsOfSymfony/FOSUserBundle).
 It contains some minor customizations to the FOS bundle.
 This bundle is used in all CCETC Symfony web applications.
